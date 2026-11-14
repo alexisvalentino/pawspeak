@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      Defence-in-depth. The app has no XSS sinks today; this bounds the damage if one is ever
+      introduced. Notes on each relaxation:
+        'wasm-unsafe-eval'  the pose/sound models run through the LiteRT WASM runtime
+        style 'unsafe-inline'  React sets element style attributes (overlay positions)
+        data:/blob: img   captured frames are shown via data URL; uploads decode from blob:
+        mediastream: media  the live camera preview is a MediaStream
+      script-src omits 'unsafe-inline', so an injected <script> still cannot execute.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'wasm-unsafe-eval';
+               worker-src 'self' blob:;
+               style-src 'self' 'unsafe-inline';
+               img-src 'self' data: blob:;
+               media-src 'self' blob: mediastream:;
+               connect-src 'self' blob: data:;
+               font-src 'self' data:;
+               object-src 'none';
+               base-uri 'self';
+               form-action 'none';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#8dddf8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>PawSpeak — Pet Body Language Companion</title>
+    <meta name="description" content="Explore dog and cat body language and spot common animals on-device with your camera. No literal translations or diagnoses." />
+    <meta property="og:title" content="PawSpeak — Pet Body Language Companion" />
+    <meta property="og:description" content="A playful pet body-language dictionary, on-device animal detector, and private observation journal." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/pawspeak-icon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon" />
+    <meta name="apple-mobile-web-app-title" content="PawSpeak" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/icons/apple-touch-icon-167.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />
+  </head>
+  <body class="bg-[#f8f9ff] text-[#0b1c30] antialiased selection:bg-[#cce5ff] selection:text-[#004b73]">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

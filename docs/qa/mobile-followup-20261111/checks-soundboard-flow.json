@@ -1,0 +1,37 @@
+[
+  {
+    "name": "blank custom phrase cannot submit",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "created phrase is visible in its selected category",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "muted sounds cannot pretend to play",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "mute setting survives reload",
+    "actual": false,
+    "status": "PASS"
+  },
+  {
+    "name": "custom phrase survives reload",
+    "actual": "Time to settle, Juniper.",
+    "status": "PASS"
+  },
+  {
+    "name": "custom tone matches selection",
+    "actual": 420,
+    "status": "PASS"
+  },
+  {
+    "name": "pet form is fresh for next companion",
+    "actual": "",
+    "status": "PASS"
+  }
+]

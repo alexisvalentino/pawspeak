@@ -1,0 +1,32 @@
+[
+  {
+    "name": "observation persisted for active dog",
+    "actual": "dc2b740f-0cd1-4e80-9420-022cc1da6d28",
+    "status": "PASS"
+  },
+  {
+    "name": "cue-based suggestion stored without fake model claim",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "edit updates rather than duplicates",
+    "actual": 1,
+    "status": "PASS"
+  },
+  {
+    "name": "edited context saved",
+    "actual": "Garden",
+    "status": "PASS"
+  },
+  {
+    "name": "saved journal survives reload",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "delete requires confirmation and removes entry",
+    "actual": 0,
+    "status": "PASS"
+  }
+]

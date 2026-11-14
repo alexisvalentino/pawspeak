@@ -1,0 +1,32 @@
+[
+  {
+    "name": "observation remains blank before first save",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "blank cue selection is rejected",
+    "actual": 1,
+    "status": "PASS"
+  },
+  {
+    "name": "required context is explained",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "unsupported species controls absent",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "no media permission is requested before consent",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "consent enables file selection",
+    "actual": true,
+    "status": "PASS"
+  }
+]

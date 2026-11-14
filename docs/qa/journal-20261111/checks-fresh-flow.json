@@ -1,0 +1,27 @@
+[
+  {
+    "name": "fresh install has no fabricated profiles",
+    "actual": 0,
+    "status": "PASS"
+  },
+  {
+    "name": "fresh install has no fabricated observations",
+    "actual": 0,
+    "status": "PASS"
+  },
+  {
+    "name": "translation and game UI absent",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "example journal is not offered",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "empty journal offers real profile creation",
+    "actual": true,
+    "status": "PASS"
+  }
+]

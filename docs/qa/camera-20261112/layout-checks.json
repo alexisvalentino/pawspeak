@@ -1,0 +1,182 @@
+[
+  {
+    "name": "cat dictionary includes species-specific cue",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "search filters cat cues",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "dictionary cue opens details",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "320x568 Camera layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 320,
+      "small": 0,
+      "width": 320
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "320x568 Learn layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 320,
+      "small": 0,
+      "width": 320
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "320x568 Journal layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 320,
+      "small": 0,
+      "width": 320
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "320x568 Pets layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 320,
+      "small": 0,
+      "width": 320
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "320px primary camera action clears bottom navigation",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "390x844 Camera layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 390,
+      "small": 0,
+      "width": 390
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "390x844 Learn layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 390,
+      "small": 0,
+      "width": 390
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "390x844 Journal layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 390,
+      "small": 0,
+      "width": 390
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "390x844 Pets layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 390,
+      "small": 0,
+      "width": 390
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "768x1024 Camera layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 768,
+      "small": 0,
+      "width": 768
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "768x1024 Learn layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 768,
+      "small": 0,
+      "width": 768
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "768x1024 Journal layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 768,
+      "small": 0,
+      "width": 768
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "768x1024 Pets layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 768,
+      "small": 0,
+      "width": 768
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "1024x768 Camera layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 1024,
+      "small": 0,
+      "width": 1024
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "1024x768 Learn layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 1024,
+      "small": 0,
+      "width": 1024
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "1024x768 Journal layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 1024,
+      "small": 0,
+      "width": 1024
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "1024x768 Pets layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 1024,
+      "small": 0,
+      "width": 1024
+    },
+    "status": "PASS"
+  }
+]

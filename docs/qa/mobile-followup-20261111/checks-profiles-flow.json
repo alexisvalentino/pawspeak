@@ -1,0 +1,22 @@
+[
+  {
+    "name": "blank pet cannot submit",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "age above limit rejected",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "new pet selected",
+    "actual": "Juniper QA",
+    "status": "PASS"
+  },
+  {
+    "name": "selected profile survives reload",
+    "actual": "Juniper QA",
+    "status": "PASS"
+  }
+]

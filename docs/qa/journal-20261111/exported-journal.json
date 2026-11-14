@@ -1,0 +1,38 @@
+{
+  "product": "PawSpeak",
+  "exportedAt": "2026-11-12T09:09:39.326Z",
+  "dogs": [
+    {
+      "id": "fa187a27-6ee9-47fb-9aa6-c315b32f097b",
+      "name": "Second dog",
+      "breed": "Not specified"
+    }
+  ],
+  "observations": [
+    {
+      "id": "f0db3cdd-792f-4887-842c-a81a711848e4",
+      "petId": "fa187a27-6ee9-47fb-9aa6-c315b32f097b",
+      "createdAt": "2026-11-12T09:09:38.838Z",
+      "occurredAt": "2026-11-12T17:09",
+      "cues": [
+        "Relaxed, loose body",
+        "Play bow: front down, rear up"
+      ],
+      "context": {
+        "activity": "Playing with a familiar toy",
+        "environment": "Living room",
+        "nearby": "Guardian and another dog",
+        "recentEvent": "Toy presented",
+        "notes": "Milo lowered his front legs, looked at the toy, then bounced back toward it."
+      },
+      "interpretation": "The play bow and loose body are consistent with a playful invitation in many dogs. Compare these cues with the other dog or person's response and stop if either becomes tense or tries to disengage.",
+      "mediaConsent": false,
+      "hasMedia": false
+    }
+  ],
+  "limitations": [
+    "User-recorded observations",
+    "Cue-based guidance, not model analysis",
+    "Raw media is not exported"
+  ]
+}

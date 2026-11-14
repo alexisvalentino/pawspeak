@@ -1,0 +1,27 @@
+[
+  {
+    "name": "playback state is visible",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "playback XP awarded once",
+    "actual": 850,
+    "status": "PASS"
+  },
+  {
+    "name": "playback returns to idle",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "unlocked badge filter excludes locked trophy",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "locked badge filter includes unfinished trophy",
+    "actual": true,
+    "status": "PASS"
+  }
+]

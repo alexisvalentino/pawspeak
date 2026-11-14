@@ -1,0 +1,26 @@
+node_modules/
+build/
+dist/
+release/
+coverage/
+public/litert-wasm/
+# Third-party repos cloned only for study (see docs/reference/).
+reference/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Offline dataset tooling (venv, weights, generated datasets).
+tools/dataset/.venv/
+tools/dataset/out*/
+*.pt
+__pycache__/
+
+# Local tool state (not shared)
+.impeccable/config.local.json
+
+# Signing material must never be committed.
+*.jks
+*.keystore
+keystore.properties

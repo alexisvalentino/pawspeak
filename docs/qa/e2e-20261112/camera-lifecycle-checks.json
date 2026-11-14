@@ -1,0 +1,27 @@
+[
+  {
+    "name": "late camera grant after page hide releases every track",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "late camera grant does not reactivate camera UI",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "opening settings suspends all camera tracks",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "settings remains usable after suspension",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "permission granted after navigation releases tracks",
+    "actual": true,
+    "status": "PASS"
+  }
+]

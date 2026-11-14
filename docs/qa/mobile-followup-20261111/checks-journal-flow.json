@@ -1,0 +1,27 @@
+[
+  {
+    "name": "blank notes cannot submit",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "entry saved for selected pet",
+    "actual": "pet_1794391277500",
+    "status": "PASS"
+  },
+  {
+    "name": "entry and any unlocked badge rewards added exactly once",
+    "actual": 490,
+    "status": "PASS"
+  },
+  {
+    "name": "daily goal claimed",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "daily goal remains claimed after reload",
+    "actual": true,
+    "status": "PASS"
+  }
+]

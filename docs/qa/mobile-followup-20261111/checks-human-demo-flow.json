@@ -1,0 +1,22 @@
+[
+  {
+    "name": "blank phrase cannot play",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "human demo creates exactly one saved result",
+    "actual": 5,
+    "status": "PASS"
+  },
+  {
+    "name": "human demo uses selected pet and direction",
+    "actual": "human_to_pet",
+    "status": "PASS"
+  },
+  {
+    "name": "human input clears after submission",
+    "actual": "",
+    "status": "PASS"
+  }
+]

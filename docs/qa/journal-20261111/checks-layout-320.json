@@ -1,0 +1,32 @@
+[
+  {
+    "name": "320x568 Observe layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 320,
+      "small": 0,
+      "w": 320
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "320x568 Journal layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 320,
+      "small": 0,
+      "w": 320
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "320x568 Dogs layout",
+    "actual": {
+      "header": 3,
+      "scrollWidth": 320,
+      "small": 0,
+      "w": 320
+    },
+    "status": "PASS"
+  }
+]

@@ -1,0 +1,48 @@
+[
+  {
+    "name": "16-second media rejected",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "valid media preview rendered",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "media consent and reference stored, not raw media",
+    "actual": [
+      true,
+      true,
+      false
+    ],
+    "status": "PASS"
+  },
+  {
+    "name": "media limitation survives reload",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "editing a profile does not change active dog",
+    "actual": "Second dog",
+    "status": "PASS"
+  },
+  {
+    "name": "deleted profile and its observations are removed",
+    "actual": [
+      1,
+      0,
+      true
+    ],
+    "status": "PASS"
+  },
+  {
+    "name": "profile and record deletion survives reload",
+    "actual": [
+      1,
+      0
+    ],
+    "status": "PASS"
+  }
+]

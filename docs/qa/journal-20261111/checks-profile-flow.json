@@ -1,0 +1,12 @@
+[
+  {
+    "name": "new dog becomes active",
+    "actual": "dc2b740f-0cd1-4e80-9420-022cc1da6d28",
+    "status": "PASS"
+  },
+  {
+    "name": "profile edits persist in state",
+    "actual": "Scoutie",
+    "status": "PASS"
+  }
+]

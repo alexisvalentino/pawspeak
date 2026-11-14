@@ -1,0 +1,40 @@
+[
+  {
+    "name": "only unlocked badges offered",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "story export dimensions",
+    "actual": {
+      "h": 1920,
+      "w": 1080
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "canvas export generates PNG",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "cancelled native share keeps card open",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "unsupported native share has a visible recovery",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "clipboard failure does not claim success",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "closing share unlocks page",
+    "actual": "",
+    "status": "PASS"
+  }
+]

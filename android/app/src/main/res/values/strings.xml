@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PawSpeak</string>
+    <string name="title_activity_main">PawSpeak</string>
+    <string name="package_name">com.pawspeak.app</string>
+    <string name="custom_url_scheme">com.pawspeak.app</string>
+</resources>

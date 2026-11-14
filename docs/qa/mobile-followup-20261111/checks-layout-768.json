@@ -1,0 +1,61 @@
+[
+  {
+    "name": "768x1024 Translate: no overflow, touch-size controls, one consistent header",
+    "actual": {
+      "headerButtons": 3,
+      "headerHeight": 65,
+      "scrollWidth": 768,
+      "small": 0,
+      "width": 768
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "768x1024 Soundboard: no overflow, touch-size controls, one consistent header",
+    "actual": {
+      "headerButtons": 3,
+      "headerHeight": 65,
+      "scrollWidth": 768,
+      "small": 0,
+      "width": 768
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "768x1024 Mood Log: no overflow, touch-size controls, one consistent header",
+    "actual": {
+      "headerButtons": 3,
+      "headerHeight": 65,
+      "scrollWidth": 768,
+      "small": 0,
+      "width": 768
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "768x1024 Pets & Stats: no overflow, touch-size controls, one consistent header",
+    "actual": {
+      "headerButtons": 3,
+      "headerHeight": 65,
+      "scrollWidth": 768,
+      "small": 0,
+      "width": 768
+    },
+    "status": "PASS"
+  },
+  {
+    "name": "768: View daily streak accessible",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "768: Share a pet card accessible",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "768: App sound accessible",
+    "actual": true,
+    "status": "PASS"
+  }
+]

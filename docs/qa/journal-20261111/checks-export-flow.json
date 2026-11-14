@@ -1,0 +1,35 @@
+[
+  {
+    "name": "export creates a JSON data URL",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "downloaded export is valid JSON",
+    "actual": "PawSpeak",
+    "status": "PASS"
+  },
+  {
+    "name": "downloaded export includes current profile",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "downloaded export contains no raw media",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "clear data empties profile and observations",
+    "actual": [
+      0,
+      0
+    ],
+    "status": "PASS"
+  },
+  {
+    "name": "clear survives reload",
+    "actual": 0,
+    "status": "PASS"
+  }
+]

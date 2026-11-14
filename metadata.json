@@ -1,0 +1,6 @@
+{
+  "name": "PawSpeak - Pet Body Language Companion",
+  "description": "Explore dog and cat body language, detect pets on-device, and keep a private observation journal.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": []
+}

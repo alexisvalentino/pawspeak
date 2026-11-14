@@ -1,0 +1,17 @@
+[
+  {
+    "name": "microphone denial does not fabricate a result",
+    "actual": 3,
+    "status": "PASS"
+  },
+  {
+    "name": "sample saved to correct pet",
+    "actual": "pet_1794391277500",
+    "status": "PASS"
+  },
+  {
+    "name": "cat history excludes dog results",
+    "actual": true,
+    "status": "PASS"
+  }
+]

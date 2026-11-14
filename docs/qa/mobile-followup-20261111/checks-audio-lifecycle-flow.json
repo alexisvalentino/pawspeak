@@ -1,0 +1,17 @@
+[
+  {
+    "name": "recording stops automatically without fabricated translation",
+    "actual": 4,
+    "status": "PASS"
+  },
+  {
+    "name": "audio tracks stopped on completion",
+    "actual": true,
+    "status": "PASS"
+  },
+  {
+    "name": "late microphone grant is stopped after navigating away",
+    "actual": true,
+    "status": "PASS"
+  }
+]
