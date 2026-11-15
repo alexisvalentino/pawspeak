@@ -19,6 +19,7 @@ __pycache__/
 
 # Local tool state (not shared)
 .impeccable/config.local.json
+.aistudio/
 
 # Signing material must never be committed.
 *.jks

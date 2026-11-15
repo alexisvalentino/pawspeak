@@ -14,18 +14,19 @@ before any public release (see Â§6); neither is a leak.**
 | Check | Result |
 |---|---|
 | Credential-shaped strings across **all** git history (`AIzaâ€¦`, `sk-â€¦`, `ghp_â€¦`, `AKIAâ€¦`, `xox[baprs]-â€¦`, PEM private keys) | **No matches** |
-| `.env` files present | Only `.env.example` (placeholders `MY_GEMINI_API_KEY`, `MY_APP_URL`) |
+| `.env` files present | None |
 | `.env*` ignored by git | Yes, with `!.env.example` allow-list |
 | Signing keystores (`*.keystore`, `*.jks`, `*.p12`, `*.pfx`) | None in the repository |
-| `google-services.json` | Absent |
+| Google AI or Firebase integration | None in the app; stale SDK and build-plugin references removed |
 
-The tracked `.env.example` contains only placeholder values and no real key. Note it is *also*
-staged for deletion in the working tree; either state is harmless.
+No environment files are present in this checkout. `.env*` remains ignored, with
+`.env.example` allow-listed for future placeholders.
 
 ## 2. What git actually tracks
 
-49 files: `src/`, `public/`, project config, and **17 PNG screenshots under `.aistudio/`**
-left over from an earlier AI Studio session. Those are product mockups, not user data.
+This cleanup removes the AI Studio screenshots and design note, along with the stale Google AI
+SDK lockfile, from the tracked tree. `.aistudio/` is now ignored so generated session files
+stay out of future commits.
 
 Ignored correctly (verified with `git check-ignore`):
 
@@ -36,6 +37,7 @@ tools/dataset/out*/                 generated datasets
 release/                            APKs and PWA zips
 *.pt                                downloaded model weights
 node_modules/
+.aistudio/                          generated AI Studio session files
 ```
 
 ## 3. Runtime data handling
