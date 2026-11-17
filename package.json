@@ -23,8 +23,10 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.6.2",
+    "@capacitor/app": "^8.1.2",
     "@capacitor/core": "^8.6.2",
     "@capacitor/ios": "^8.6.2",
+    "@capacitor/keyboard": "^8.0.6",
     "@litertjs/core": "2.6.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tensorflow-models/coco-ssd": "^2.2.3",

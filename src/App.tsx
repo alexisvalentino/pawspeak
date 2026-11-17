@@ -1,11 +1,12 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { Capacitor } from '@capacitor/core';
+import { App as CapacitorApp } from '@capacitor/app';
 import { BookOpen } from 'lucide-react';
 import { AppHeader } from './components/AppHeader';
 import { AppNavigation } from './components/AppNavigation';
 import { CameraScreen } from './components/CameraScreen';
 import { DictionaryScreen } from './components/DictionaryScreen';
-import { DogForm } from './components/DogForm';
+import { PetForm } from './components/PetForm';
 import { ObservationForm } from './components/ObservationForm';
 import { JournalList } from './components/JournalList';
 import { ProfilesScreen } from './components/ProfilesScreen';
@@ -26,7 +27,7 @@ export default function App() {
   });
   const [screen, setScreen] = useState<Screen>('camera');
   const [species, setSpecies] = useState<PetKind>('dog');
-  const [dogForm, setDogForm] = useState<{ id?: string; open: boolean }>({ open: false });
+  const [petForm, setPetForm] = useState<{ id?: string; open: boolean }>({ open: false });
   const [editing, setEditing] = useState<Observation | undefined>();
   const [storageError, setStorageError] = useState(false);
   const [toast, setToast] = useState('');
@@ -40,11 +41,33 @@ export default function App() {
   const cameraPermissionRequestRef = useRef(0);
   const initialCameraStreamRef = useRef<MediaStream | null>(null);
   const [initialCameraStreamToken, setInitialCameraStreamToken] = useState(0);
-  const dog = state.dogs.find(d => d.id === state.activeDogId);
-  const observations = state.observations.filter(o => o.petId === dog?.id);
+  const pet = state.dogs.find(d => d.id === state.activeDogId);
+  const observations = state.observations.filter(o => o.petId === pet?.id);
   useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); localStorage.setItem(INITIALIZED_KEY, 'true'); setStorageError(false); } catch { setStorageError(true); } }, [state]);
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 4000); return () => clearTimeout(timer); }, [toast]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [screen]);
+  useEffect(() => {
+    // Android hardware back: return to the camera (home) screen before leaving.
+    // Without this the back button closes the app from any screen.
+    if (Capacitor.getPlatform() !== 'android') return;
+    let disposed = false;
+    let removeListener: (() => Promise<void>) | undefined;
+    void CapacitorApp.addListener('backButton', () => {
+      if (screen !== 'camera') {
+        setScreen('camera');
+        setEditing(undefined);
+        return;
+      }
+      void CapacitorApp.exitApp();
+    }).then(handle => {
+      if (disposed) void handle.remove();
+      else removeListener = () => handle.remove();
+    });
+    return () => {
+      disposed = true;
+      if (removeListener) void removeListener();
+    };
+  }, [screen]);
   useEffect(() => {
     // Capacitor ships the complete app and model inside the APK, so browser-side
     // cache copies are only needed for the installable web app.
@@ -113,7 +136,7 @@ export default function App() {
     />;
   }
   return <div className="app-shell">
-    <AppHeader dogs={state.dogs} activeDog={dog} onHome={() => setScreen('camera')} onSelect={id => { if (id) dispatch({ type: 'select', id }); setScreen('journal'); setEditing(undefined); }} onAdd={() => setDogForm({ open: true })} onExport={() => { downloadJournal(state); notify('Text journal export requested. Media is not included.'); }} onClear={() => { dispatch({ type: 'clear' }); setEditing(undefined); notify('Local profiles and observations deleted.'); }} />
+    <AppHeader pets={state.dogs} activePet={pet} onHome={() => setScreen('camera')} onSelect={id => { if (id) dispatch({ type: 'select', id }); setScreen('journal'); setEditing(undefined); }} onAdd={() => setPetForm({ open: true })} onExport={() => { downloadJournal(state); notify('Text journal export requested. Media is not included.'); }} onClear={() => { dispatch({ type: 'clear' }); setEditing(undefined); notify('Local profiles and observations deleted.'); }} />
     <main id="main-content" className="app-content">
       {storageError && <p className="error-text" role="alert">This browser could not save your changes. Keep this tab open and export a copy if possible.</p>}
       {screen === 'camera' && <CameraScreen
@@ -123,14 +146,14 @@ export default function App() {
         onExplore={kind => { setSpecies(kind); setScreen('dictionary'); }}
       />}
       {screen === 'dictionary' && <DictionaryScreen species={species} onSpeciesChange={setSpecies} />}
-      {screen === 'observe' && dog && (editing ? <ObservationForm key={editing.id} dog={dog} observation={editing} onSave={entry => { dispatch({ type: 'saveObservation', observation: entry }); setEditing(undefined); setScreen('journal'); notify('Observation updated.'); }} onCancel={() => { setEditing(undefined); setScreen('journal'); }} />
-        : <ObservationForm key={dog.id} dog={dog} onSave={entry => { dispatch({ type: 'saveObservation', observation: entry }); setScreen('journal'); notify('Observation saved.'); }} />)}
-      {screen === 'journal' && (dog ? <><PageHeading tone="mint" icon={<BookOpen />} title={`${dog.name}'s journal`} description="Notice patterns over time." action={<button className="button-primary" onClick={() => { setEditing(undefined); setScreen('observe'); }}>New observation</button>} /><JournalList observations={observations} onEdit={entry => { setEditing(entry); setScreen('observe'); }} onDelete={id => { dispatch({ type: 'deleteObservation', id }); notify('Observation deleted.'); }} /></>
-        : <><PageHeading tone="mint" icon={<BookOpen />} title="Your journal" description="A little record of the moments you notice." action={<button className="button-primary" onClick={() => setDogForm({ open: true })}>Add dog</button>} /><div className="empty-state journal-empty"><h2>Your pet’s story starts here</h2><p>Add a dog profile to keep observations and context together.</p></div></>)}
-      {screen === 'profiles' && <ProfilesScreen dogs={state.dogs} observations={state.observations} onAdd={() => setDogForm({ open: true })} onEdit={dog => setDogForm({ id: dog.id, open: true })} onDelete={id => { dispatch({ type: 'deleteDog', id }); notify('Dog and observations deleted.'); }} />}
+      {screen === 'observe' && pet && (editing ? <ObservationForm key={editing.id} pet={pet} observation={editing} onSave={entry => { dispatch({ type: 'saveObservation', observation: entry }); setEditing(undefined); setScreen('journal'); notify('Observation updated.'); }} onCancel={() => { setEditing(undefined); setScreen('journal'); }} />
+        : <ObservationForm key={pet.id} pet={pet} onSave={entry => { dispatch({ type: 'saveObservation', observation: entry }); setScreen('journal'); notify('Observation saved.'); }} />)}
+      {screen === 'journal' && (pet ? <><PageHeading tone="mint" icon={<BookOpen />} title={`${pet.name}'s journal`} description="Notice patterns over time." action={<button className="button-primary" onClick={() => { setEditing(undefined); setScreen('observe'); }}>New observation</button>} /><JournalList observations={observations} onEdit={entry => { setEditing(entry); setScreen('observe'); }} onDelete={id => { dispatch({ type: 'deleteObservation', id }); notify('Observation deleted.'); }} /></>
+        : <><PageHeading tone="mint" icon={<BookOpen />} title="Your journal" description="A little record of the moments you notice." action={<button className="button-primary" onClick={() => setPetForm({ open: true })}>Add pet</button>} /><div className="empty-state journal-empty"><h2>Your pet’s story starts here</h2><p>Add a dog or cat profile to keep observations and context together.</p></div></>)}
+      {screen === 'profiles' && <ProfilesScreen pets={state.dogs} observations={state.observations} onAdd={() => setPetForm({ open: true })} onEdit={pet => setPetForm({ id: pet.id, open: true })} onDelete={id => { dispatch({ type: 'deletePet', id }); notify('Pet and observations deleted.'); }} />}
     </main>
     <AppNavigation screen={screen} onNavigate={next => { setScreen(next); if (next !== 'observe') setEditing(undefined); }} />
-    {dogForm.open && <DogForm key={dogForm.id ?? 'new'} dog={state.dogs.find(d => d.id === dogForm.id)} onClose={() => setDogForm({ open: false })} onSave={pet => { dispatch({ type: 'saveDog', dog: pet }); if (!dogForm.id) dispatch({ type: 'select', id: pet.id }); setDogForm({ open: false }); setScreen(dogForm.id ? 'profiles' : 'journal'); notify(dogForm.id ? 'Profile updated.' : `${pet.name}'s journal is ready.`); }} />}
+    {petForm.open && <PetForm key={petForm.id ?? 'new'} pet={state.dogs.find(d => d.id === petForm.id)} onClose={() => setPetForm({ open: false })} onSave={pet => { dispatch({ type: 'savePet', pet }); if (!petForm.id) dispatch({ type: 'select', id: pet.id }); setPetForm({ open: false }); setScreen(petForm.id ? 'profiles' : 'journal'); notify(petForm.id ? 'Profile updated.' : `${pet.name}'s journal is ready.`); }} />}
     {toast && <div role="status" className="app-toast">{toast}</div>}
   </div>;
 }

@@ -1,4 +1,4 @@
-import { BODY_CUES, BodyCue, DogProfile, JournalState, Observation, ObservationContext } from '../types/journal';
+import { BODY_CUES, BodyCue, cuesForSpecies, DogProfile, JournalState, Observation, ObservationContext, PetProfile, PetSpecies } from '../types/journal';
 
 export const STORAGE_KEY = 'pawspeak.journal.v2';
 export const LEGACY_KEY = 'pawspeak.state.v1';
@@ -10,9 +10,29 @@ export const toLocalInput = (date = new Date()) => {
 };
 export const formatObservationTime = (value: string) => new Date(`${value}:00`).toLocaleString();
 
-export function suggestions(cues: BodyCue[], context: ObservationContext): string | null {
+export function suggestions(cues: BodyCue[], context: ObservationContext, species: PetSpecies = 'dog'): string | null {
   const selected = new Set(cues);
   const text = Object.values(context).join(' ').toLowerCase();
+  if (species === 'cat') {
+    if (selected.has('Sudden limp, collapse, or visible injury')) {
+      return 'Contact a veterinarian promptly for this observation. Sudden behavior change, collapse, or visible injury should not wait for app interpretation. Keep the cat safe and follow the clinic\'s advice.';
+    }
+    if (selected.has('Crouched low or shifted weight back') || selected.has('Ears turned sideways or flattened')
+      || selected.has('Tail held close, tucked, or puffed') || selected.has('Tail flicking or lashing')
+      || selected.has('Hissing, growling, or repeated vocalizing') || selected.has('Rigid posture or prolonged staring')
+      || selected.has('Turning away, hiding, or seeking distance')) {
+      return 'These cues can happen when a cat is wary, overstimulated, or trying to create space; one observation cannot tell you why. Pause interaction, leave an easy way to move away, and avoid picking the cat up or cornering them.';
+    }
+    if (selected.has('Pacing or repeated circling')) {
+      return text.includes('meal') || text.includes('visitor') || text.includes('play')
+        ? 'Pacing can happen around anticipation, but it can also reflect discomfort or other causes. Note what happens before and afterward and whether the cat can settle. If this is sudden or unusual, contact a veterinarian.'
+        : 'Repeated pacing can have many causes; this record is not enough to identify one. Note the setting, duration, and what helps the cat settle. Seek veterinary advice if it is sudden, severe, or unusual.';
+    }
+    if (selected.has('Lip licking or repeated yawning')) {
+      return 'Repeated lip licking or yawning can occur with stress or discomfort, but neither cue identifies a cause on its own. Note the situation and the rest of the cat\'s body. Contact a veterinarian if it is sudden or unusual.';
+    }
+    return null;
+  }
   if (selected.has('Sudden limp, collapse, or visible injury')) {
     return 'Contact a veterinarian promptly for this observation. Sudden behavior change, collapse, or visible injury should not wait for app interpretation. Keep the dog safe and follow the clinic\'s advice.';
   }
@@ -42,27 +62,33 @@ export function suggestions(cues: BodyCue[], context: ObservationContext): strin
   return null;
 }
 
-export function validateObservation(observation: Observation, now = new Date()): string | null {
-  if (!observation.id || !observation.petId) return 'An observation must belong to a dog.';
+export function validateObservation(observation: Observation, now = new Date(), species: PetSpecies = 'dog'): string | null {
+  if (!observation.id || !observation.petId) return 'An observation must belong to a pet.';
   if (!observation.context.activity.trim() || !observation.context.environment.trim()) return 'Add the activity and setting to give this observation context.';
   if (!observation.context.notes.trim()) return 'Describe what happened before, during, and after the observation.';
   if (!Number.isFinite(Date.parse(observation.occurredAt))) return 'Use a valid observation date and time.';
   if (Date.parse(observation.occurredAt) > now.getTime() + 5 * 60 * 1000) return 'Observation time cannot be in the future.';
   if (observation.cues.length === 0) return 'Choose at least one observable cue.';
-  if (observation.cues.some(cue => !BODY_CUES.includes(cue))) return 'Choose a supported observation cue.';
+  if (observation.cues.some(cue => !BODY_CUES.includes(cue) || !cuesForSpecies(species).includes(cue))) return 'Choose a supported observation cue for this pet.';
   if (observation.hasMedia && !observation.mediaConsent) return 'Consent is required to include media.';
   return null;
 }
 
-function validDog(value: unknown): value is DogProfile {
-  const dog = value as DogProfile;
-  return typeof dog?.id === 'string' && typeof dog.name === 'string' && dog.name.trim().length > 0
-    && typeof dog.breed === 'string' && (!dog.birthdate || !Number.isNaN(Date.parse(dog.birthdate)));
+type StoredPet = DogProfile;
+function validPet(value: unknown): value is StoredPet {
+  const pet = value as StoredPet;
+  return typeof pet?.id === 'string' && typeof pet.name === 'string' && pet.name.trim().length > 0
+    && (pet.species === undefined || pet.species === 'dog' || pet.species === 'cat')
+    && typeof pet.breed === 'string' && (!pet.birthdate || !Number.isNaN(Date.parse(pet.birthdate)));
 }
-function validObservation(value: unknown): value is Observation {
+function normalizePet(pet: StoredPet): PetProfile {
+  return { ...pet, species: pet.species ?? 'dog' };
+}
+function validObservation(value: unknown, species?: PetSpecies): value is Observation {
   const observation = value as Observation;
   if (typeof observation?.id !== 'string' || typeof observation.petId !== 'string' || !Array.isArray(observation.cues)
-    || observation.cues.some(cue => !BODY_CUES.includes(cue)) || !observation.context || !Number.isFinite(Date.parse(observation.occurredAt))
+    || observation.cues.some(cue => !BODY_CUES.includes(cue) || (species && !cuesForSpecies(species).includes(cue)))
+    || !observation.context || !Number.isFinite(Date.parse(observation.occurredAt))
     || typeof observation.context.activity !== 'string' || typeof observation.context.environment !== 'string'
     || typeof observation.context.notes !== 'string' || typeof observation.context.nearby !== 'string'
     || typeof observation.context.recentEvent !== 'string') return false;
@@ -75,10 +101,13 @@ export function migrateState(raw: string | null, legacyRaw?: string | null, init
   try {
     if (raw) {
       const value = JSON.parse(raw);
-      if (value?.version === 2 && Array.isArray(value.dogs) && value.dogs.every(validDog)
-        && Array.isArray(value.observations) && value.observations.every(validObservation)
-        && value.observations.every((o: Observation) => value.dogs.some((d: DogProfile) => d.id === o.petId))) {
-        const dogs = value.dogs.filter((d: DogProfile) => d.id !== 'demo-dog');
+      if (value?.version === 2 && Array.isArray(value.dogs) && value.dogs.every(validPet)
+        && Array.isArray(value.observations) && value.observations.every((o: unknown) => {
+          const observation = o as Observation;
+          const pet = value.dogs.find((d: StoredPet) => d.id === observation?.petId);
+          return !!pet && validObservation(o, pet.species ?? 'dog');
+        })) {
+        const dogs = (value.dogs as StoredPet[]).filter(d => d.id !== 'demo-dog').map(normalizePet);
         const observations = value.observations.filter((o: Observation) => o.petId !== 'demo-dog' && o.id !== 'demo-observation');
         return { version: 2, dogs, observations, activeDogId: dogs.some((d: DogProfile) => d.id === value.activeDogId) ? value.activeDogId : dogs[0]?.id ?? null };
       }
@@ -88,7 +117,7 @@ export function migrateState(raw: string | null, legacyRaw?: string | null, init
     const old = JSON.parse(legacyRaw);
     if (old?.version !== 1 || !Array.isArray(old.pets) || !Array.isArray(old.moodEntries)) return empty;
     const dogs = old.pets.filter((p: { species: string; id: string; name: string }) => p.species === 'dog' && p.id && p.name && !/^pet_[1-4]$/.test(p.id)).map((p: { id: string; name: string; breed: string }) => ({
-      id: p.id, name: p.name, breed: typeof p.breed === 'string' ? p.breed : 'Not specified'
+      id: p.id, name: p.name, species: 'dog' as const, breed: typeof p.breed === 'string' ? p.breed : 'Not specified'
     }));
     const observations = old.moodEntries.filter((e: { id: string; petId: string; notes: string }) => !/^mood_\d+$/.test(e.id) && dogs.some((d: DogProfile) => d.id === e.petId) && typeof e.notes === 'string').map((e: { id: string; petId: string; notes: string; tags?: string[] }) => {
       const tags = e.tags?.length ? e.tags.join(', ') : 'Migrated observation';
@@ -103,21 +132,25 @@ export function migrateState(raw: string | null, legacyRaw?: string | null, init
 
 export function reducer(state: JournalState, action: { type: string; [key: string]: unknown }): JournalState {
   switch (action.type) {
-    case 'saveDog': {
-      const dog = action.dog as DogProfile;
+    case 'saveDog':
+    case 'savePet': {
+      const source = (action.pet ?? action.dog) as StoredPet;
+      const dog = normalizePet(source);
       const dogs = state.dogs.some(d => d.id === dog.id) ? state.dogs.map(d => d.id === dog.id ? dog : d) : [...state.dogs, dog];
       return { ...state, dogs, activeDogId: state.activeDogId ?? dog.id };
     }
     case 'select': return state.dogs.some(d => d.id === action.id) ? { ...state, activeDogId: action.id as string } : state;
     case 'saveObservation': {
       const observation = action.observation as Observation;
-      if (validateObservation(observation) || !state.dogs.some(d => d.id === observation.petId)) return state;
+      const pet = state.dogs.find(d => d.id === observation.petId);
+      if (!pet || validateObservation(observation, new Date(), pet.species)) return state;
       const observations = state.observations.some(o => o.id === observation.id)
         ? state.observations.map(o => o.id === observation.id ? observation : o) : [observation, ...state.observations];
       return { ...state, observations };
     }
     case 'deleteObservation': return { ...state, observations: state.observations.filter(o => o.id !== action.id) };
-    case 'deleteDog': {
+    case 'deleteDog':
+    case 'deletePet': {
       const dogs = state.dogs.filter(d => d.id !== action.id);
       return { ...state, dogs, observations: state.observations.filter(o => o.petId !== action.id), activeDogId: dogs[0]?.id ?? null };
     }
@@ -127,7 +160,9 @@ export function reducer(state: JournalState, action: { type: string; [key: strin
 }
 
 export function exportJournal(state: JournalState): string {
-  return JSON.stringify({ product: 'PawSpeak', exportedAt: new Date().toISOString(), dogs: state.dogs,
+  const pets = state.dogs.map(normalizePet);
+  return JSON.stringify({ product: 'PawSpeak', exportedAt: new Date().toISOString(), pets,
+    dogs: pets.filter(pet => pet.species === 'dog'),
     observations: state.observations, limitations: ['User-recorded observations', 'Cue-based guidance, not model analysis', 'Raw media is not exported'] }, null, 2);
 }
 

@@ -27,7 +27,7 @@ export function DictionaryScreen({ species, onSpeciesChange }: { species: PetKin
       .join(' ').toLowerCase().includes(normalizedQuery)));
 
   return <div>
-    <PageHeading tone="amber" icon={<BookOpen />} title="Learn their little language" description="Every wag, wiggle, and whisker has a story." />
+    <PageHeading tone="amber" icon={<BookOpen />} title="Learn their little language" description="PawSpeak’s body-language dictionary covers dogs and cats only." />
     <div className="species-switch" role="group" aria-label="Choose animal">
       <button className={species === 'dog' ? 'species-active' : ''} aria-pressed={species === 'dog'} onClick={() => { setCategory('All'); onSpeciesChange('dog'); }}><Dog />Dogs</button>
       <button className={species === 'cat' ? 'species-active' : ''} aria-pressed={species === 'cat'} onClick={() => { setCategory('All'); onSpeciesChange('cat'); }}><Cat />Cats</button>
