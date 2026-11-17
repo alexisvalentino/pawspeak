@@ -15,7 +15,7 @@
  *   node scripts/build-android-release.mjs
  */
 import {spawn} from 'node:child_process';
-import {access, copyFile, mkdir} from 'node:fs/promises';
+import {access, copyFile, mkdir, stat} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -81,10 +81,18 @@ if (exitCode !== 0) process.exit(exitCode);
 
 const releaseDir = path.join(projectRoot, 'release');
 await mkdir(releaseDir, {recursive: true});
-const suffix = keystore ? 'release' : 'release-unsigned';
+const apkOutputDir = path.join(androidRoot, 'app', 'build', 'outputs', 'apk', 'release');
+const candidates = await Promise.all(['app-release.apk', 'app-release-unsigned.apk'].map(async name => {
+  const file = path.join(apkOutputDir, name);
+  try { return {file, modified: (await stat(file)).mtimeMs}; }
+  catch { return null; }
+}));
+const latestApk = candidates.filter(Boolean).sort((a, b) => b.modified - a.modified)[0];
+if (!latestApk) {
+  console.error(`Gradle did not produce a release APK in ${apkOutputDir}`);
+  process.exit(1);
+}
+const suffix = latestApk.file.endsWith('app-release-unsigned.apk') ? 'release-unsigned' : 'release';
 const target = path.join(releaseDir, `PawSpeak-${suffix}.apk`);
-await copyFile(
-  path.join(androidRoot, 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk'),
-  target,
-);
+await copyFile(latestApk.file, target);
 console.log(`Release APK copied to ${target}`);
