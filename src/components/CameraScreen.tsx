@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AlertCircle, Camera, Cat, CheckCircle2, CircleDashed, Dog, ImagePlus, LoaderCircle, PawPrint, RefreshCw, ShieldCheck, Sun, SwitchCamera, X } from 'lucide-react';
+import { AlertCircle, Camera, Cat, CheckCircle2, CircleDashed, Dog, ImagePlus, LoaderCircle, PawPrint, RefreshCw, ShieldCheck, SwitchCamera, X } from 'lucide-react';
 import { detectPets, detectScene, getBehaviorClassifier, type BehaviorResult, type PetDetection, type PetKind, type SceneObject } from '../ml/petClassifier';
 import { BODY_LANGUAGE } from '../data/bodyLanguage';
 import { buildLiveGuidance, sampleLuminance, type GuidanceCheck } from '../ml/liveGuidance';
@@ -341,7 +341,7 @@ export function CameraScreen({ onExplore, offlineStatus, initialCameraStreamRef,
         </svg>}
         {analysis?.detections.map((animal, i) => <span key={i} className="detection-box" style={{ left: `${animal.bbox[0] / (lastCanvasRef.current?.width || 1) * 100}%`, top: `${animal.bbox[1] / (lastCanvasRef.current?.height || 1) * 100}%`, width: `${animal.bbox[2] / (lastCanvasRef.current?.width || 1) * 100}%`, height: `${animal.bbox[3] / (lastCanvasRef.current?.height || 1) * 100}%` }}><span className="live-pet-label">{animalName(animal.pet)} · {Math.round(animal.confidence * 100)}% model score</span></span>)}
         {phase === 'analyzing' && <div className="analyzing-cover"><LoaderCircle className="spin" /><strong>Checking your photo…</strong><span>Your photo stays on this device.</span></div>}
-      </div> : <div className="camera-empty"><PawPrint className="welcome-paw welcome-paw-one" /><PawPrint className="welcome-paw welcome-paw-two" /><div className="camera-empty-icons"><Dog /><Cat /></div><h2>Let’s spot an animal!</h2><p>Keep one animal in good light for a clearer detection.</p><small className="camera-profile-note">The camera can find other common animals; body-language guides are for dogs and cats only. No pet profile needed.</small><span className="ready-badge"><Sun />Ready when you are</span></div>}
+      </div> : <div className="camera-empty"><PawPrint className="welcome-paw welcome-paw-one" /><PawPrint className="welcome-paw welcome-paw-two" /><div className="camera-empty-icons"><Dog /><Cat /></div><h2>A clear view helps</h2><p>Keep one animal in good light for a clearer detection.</p><small className="camera-profile-note">Scan without a pet profile. Dog and cat guides are in Learn.</small></div>}
       <canvas ref={canvasRef} hidden />
     </div>
     {phase === 'live' && <button className="capture-button" onClick={() => void capture()}><Camera /><span>Capture pet</span></button>}

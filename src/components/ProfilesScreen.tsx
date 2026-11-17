@@ -11,7 +11,7 @@ export function ProfilesScreen({ pets, observations, onAdd, onEdit, onDelete }: 
   const [deletePet, setDeletePet] = useState<PetProfile | null>(null);
   return <div><PageHeading tone="sky" icon={<PawPrint />} title="Your pets" description="A separate journal for each companion." action={<button className="button-primary" onClick={onAdd}>Add pet</button>} />
     {pets.length === 0 ? <div className="empty-state"><h2 className="heading-md">No pet profiles yet</h2><p className="body-secondary mt-2">Add a dog or cat profile to keep their observations together.</p></div>
-      : <div className="grid gap-4 sm:grid-cols-2">{pets.map(pet => <article className="surface p-5" key={pet.id}><h2 className="heading-md">{pet.name}</h2><p className="body-secondary mt-1">{pet.species === 'cat' ? 'Cat' : 'Dog'} · {pet.breed}</p>
+      : <div className="grid gap-4 sm:grid-cols-2">{pets.map(pet => <article className="surface pet-profile-card" key={pet.id}><h2 className="heading-md">{pet.name}</h2><p className="body-secondary mt-1">{pet.species === 'cat' ? 'Cat' : 'Dog'} · {pet.breed}</p>
         {pet.birthdate && <p className="body-secondary mt-2">Born {new Date(`${pet.birthdate}T12:00:00`).toLocaleDateString()}</p>}{pet.notes && <p className="mt-3 text-sm leading-6">{pet.notes}</p>}
         <p className="body-secondary mt-3">{observations.filter(o => o.petId === pet.id).length} observations</p>
         <div className="flex gap-2 mt-4"><button className="button-secondary" onClick={() => onEdit(pet)}>Edit profile</button><button className="button-danger-secondary" onClick={() => setDeletePet(pet)}>Delete</button></div>

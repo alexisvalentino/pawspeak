@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { cuesForSpecies, Observation, PetProfile } from '../types/journal';
 import { createId, suggestions, toLocalInput, validateObservation } from '../utils/journal';
 import { MediaAttachment, MediaPreview } from './MediaAttachment';
+import { PawPrint } from 'lucide-react';
+import { PageHeading } from './PageHeading';
 
 export function ObservationForm({ pet, observation, onSave, onCancel }: {
   pet: PetProfile; observation?: Observation; onSave: (observation: Observation) => void; onCancel?: () => void;
@@ -43,8 +45,8 @@ export function ObservationForm({ pet, observation, onSave, onCancel }: {
     if (!observation) { setCues([]); setActivity(''); setEnvironment(''); setNearby(''); setRecentEvent(''); setNotes(''); setMedia(null); setConsent(false); setOccurredAt(toLocalInput()); }
     onCancel?.();
   }} className="space-y-1" noValidate>
-    <div className="mb-5"><h1 className="heading-lg">{observation ? 'Edit observation' : `What did you notice about ${pet.name}?`}</h1>
-      <p className="body-secondary mt-2">Record what you saw and heard before deciding what it might mean.</p></div>
+    <PageHeading tone="mint" icon={<PawPrint />} title={observation ? 'Edit observation' : `What did you notice about ${pet.name}?`}
+      description="Record what you saw and heard before deciding what it might mean." />
     {error && <div className="error-text mb-4" role="alert" tabIndex={-1}><h2 className="font-bold">This observation needs more detail</h2><p className="mt-1">{error}</p></div>}
     <section className="section-block">
       <h2 className="heading-md">Observed cues</h2>

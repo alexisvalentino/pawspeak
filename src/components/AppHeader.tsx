@@ -18,7 +18,7 @@ export function AppHeader({ pets, activePet, onSelect, onAdd, onExport, onClear,
   return <header className="app-header"><div className="app-header-inner flex h-16 items-center gap-2">
     <button className="brand-home shrink-0" onClick={onHome} aria-label="PawSpeak home"><img className="brand-mark" src="/pawspeak-icon.svg" alt="" /><span className="brand-name">PawSpeak<span className="brand-dot">.</span></span></button>
     <span className="brand-tagline hidden sm:inline body-secondary ml-2">Pet pals, understood.</span>
-    <button className="pet-picker ml-auto button-secondary min-w-0" onClick={() => openMenu('pets')} aria-label={`Current pet: ${activePet?.name ?? 'none'}`}><ActivePetIcon /><span className="pet-picker-name">{activePet?.name ?? 'Choose pet'}</span><ChevronDown /></button>
+    <button className="pet-picker ml-auto button-secondary min-w-0" onClick={() => openMenu('pets')} aria-label={activePet ? `Current pet: ${activePet.name}. Switch pet` : 'Add a pet profile (optional)'}><ActivePetIcon /><span className="pet-picker-name">{activePet?.name ?? 'Add pet'}</span><ChevronDown /></button>
     <button className="menu-button button-secondary" onClick={() => openMenu('settings')} aria-label="Open journal settings"><Menu /></button>
   </div>
   {menu && <Modal label={menu === 'pets' ? 'Choose pet' : 'Journal settings'} onClose={close}><div className="modal-panel surface w-full max-w-md p-5 relative">
