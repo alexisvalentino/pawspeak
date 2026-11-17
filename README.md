@@ -467,7 +467,8 @@ on a plain-`http://` LAN address browsers disable `getUserMedia` entirely, which
 common cause of "the camera does not work" when testing from a phone. Install the APK, use
 HTTPS, or use `adb reverse`.
 
-Detailed documentation: [TECHNICAL_SPEC](docs/TECHNICAL_SPEC.md) ·
+Detailed documentation: [DEVELOPMENT_GUIDE](docs/DEVELOPMENT_GUIDE.md) ·
+[PET_AI_STRATEGY](docs/PET_AI_STRATEGY.md) · [TECHNICAL_SPEC](docs/TECHNICAL_SPEC.md) ·
 [PRODUCT_SPEC](docs/PRODUCT_SPEC.md) · [DATA_AND_EVALUATION](docs/DATA_AND_EVALUATION.md) ·
 [MOBILE_TESTING](docs/MOBILE_TESTING.md) · [ROADMAP](docs/ROADMAP.md) ·
 [DeepCat audit](docs/reference/DeepCat-audit.md) · [dataset tooling](tools/dataset/README.md)

@@ -10,6 +10,11 @@ The app now has a searchable dog/cat body-language dictionary, on-device COCO-SS
 
 ## Stage 2 — Define and label cue targets
 
+> **Active.** The concrete build order, cue shortlist, manifest requirements, and release
+> gates for this stage are in [DEVELOPMENT_GUIDE](DEVELOPMENT_GUIDE.md). The direction it
+> serves, and the alternatives that were rejected, are in
+> [PET_AI_STRATEGY](PET_AI_STRATEGY.md).
+
 Choose a small set of observable dog/cat still-image cues first. Keep movement cues that require video, vocal cues that require audio, and context-only observations separate. The external model recommendation classifies the existing 102 dictionary entries into these groups, but those modality labels are not stored in the dictionary and its analysis script is not present in this checkout; review the classifications before using them as a training plan. The dictionary and its illustrations are product content, not a training set. Establish media rights, consent, annotation guidance, and held-out animal/environment splits before model training.
 
 ## Stage 3 — Evaluated on-device cue models
