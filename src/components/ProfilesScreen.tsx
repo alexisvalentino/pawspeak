@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { PawPrint } from 'lucide-react';
 import { PetProfile } from '../types/journal';
+import { PetEmptyState } from './PetEmptyState';
 import { Modal } from './modals/Modal';
 import { PageHeading } from './PageHeading';
 
-export function ProfilesScreen({ pets, observations, onAdd, onEdit, onDelete }: {
+export function ProfilesScreen({ pets, observations, onEdit, onDelete }: {
   pets: PetProfile[]; observations: { petId: string }[];
-  onAdd: () => void; onEdit: (pet: PetProfile) => void; onDelete: (id: string) => void;
+  onEdit: (pet: PetProfile) => void; onDelete: (id: string) => void;
 }) {
   const [deletePet, setDeletePet] = useState<PetProfile | null>(null);
-  return <div><PageHeading tone="sky" icon={<PawPrint />} title="Your pets" description="A separate journal for each companion." action={<button className="button-primary" onClick={onAdd}>Add pet</button>} />
-    {pets.length === 0 ? <div className="empty-state"><h2 className="heading-md">No pet profiles yet</h2><p className="body-secondary mt-2">Add a dog or cat profile to keep their observations together.</p></div>
-      : <div className="grid gap-4 sm:grid-cols-2">{pets.map(pet => <article className="surface pet-profile-card" key={pet.id}><h2 className="heading-md">{pet.name}</h2><p className="body-secondary mt-1">{pet.species === 'cat' ? 'Cat' : 'Dog'} · {pet.breed}</p>
+  return <div><PageHeading tone="sky" icon={<PawPrint />} title="Your pets" description="A separate journal for each companion." />
+    {pets.length === 0 ? <PetEmptyState title="No pet profiles yet" />
+      : <div className="grid gap-4 sm:grid-cols-2">{pets.map(pet => <article className="surface pet-profile-card" key={pet.id}><div className="pet-profile-heading"><img className="mascot-avatar" src={pet.species === 'cat' ? '/mascots/cat.webp' : '/mascots/dog.webp'} alt="" /><div><h2 className="heading-md">{pet.name}</h2><p className="body-secondary mt-1">{pet.species === 'cat' ? 'Cat' : 'Dog'} · {pet.breed}</p></div></div>
         {pet.birthdate && <p className="body-secondary mt-2">Born {new Date(`${pet.birthdate}T12:00:00`).toLocaleDateString()}</p>}{pet.notes && <p className="mt-3 text-sm leading-6">{pet.notes}</p>}
         <p className="body-secondary mt-3">{observations.filter(o => o.petId === pet.id).length} observations</p>
         <div className="flex gap-2 mt-4"><button className="button-secondary" onClick={() => onEdit(pet)}>Edit profile</button><button className="button-danger-secondary" onClick={() => setDeletePet(pet)}>Delete</button></div>

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Observation } from '../types/journal';
+import { Observation, PetSpecies } from '../types/journal';
 import { Modal } from './modals/Modal';
 import { formatObservationTime } from '../utils/journal';
+import { MascotDuoScene } from './MascotDuoScene';
 
-export function JournalList({ observations, onEdit, onDelete }: {
+export function JournalList({ observations, species, onEdit, onDelete }: {
+  species: PetSpecies;
   observations: Observation[]; onEdit: (observation: Observation) => void; onDelete: (id: string) => void;
 }) {
   const [selected, setSelected] = useState<Observation | null>(null);
@@ -14,7 +16,7 @@ export function JournalList({ observations, onEdit, onDelete }: {
     <div className="flex flex-wrap items-start justify-between gap-3"><div><h2 className="heading-md">Saved observations</h2><p className="body-secondary mt-1">{observations.length} {observations.length === 1 ? 'entry' : 'entries'} · newest first</p></div>
       {observations.length > 3 && <div><label className="sr-only" htmlFor="journal-search">Search observations</label><input id="journal-search" className="field" type="search" placeholder="Search notes, cues or setting" value={query} onChange={e => setQuery(e.target.value)} /></div>}</div>
     <div className="mt-4">
-      {filtered.length === 0 ? <div className="empty-state"><h3 className="font-bold">{observations.length ? 'No matching entries' : 'Your journal starts here'}</h3><p className="body-secondary mt-1">{observations.length ? 'Try a different search.' : 'Record a specific moment so you can compare it with later behavior.'}</p></div>
+      {filtered.length === 0 ? <div className={`empty-state journal-list-empty${observations.length ? ' is-filtered' : ''}`}>{observations.length === 0 && <img className="empty-mascot-solo mascot-avatar" src={`/mascots/${species}.webp`} alt="" />}<h3 className="font-bold">{observations.length ? 'No matching entries' : 'Your journal starts here'}</h3><p className="body-secondary mt-1">{observations.length ? 'Try a different search.' : 'Record a specific moment so you can compare it with later behavior.'}</p></div>
         : filtered.map(entry => <article key={entry.id} className="journal-entry">
           <div className="flex flex-wrap gap-x-3 gap-y-1 justify-between"><h3 className="font-bold">{entry.context.activity}</h3><time className="body-secondary" dateTime={entry.occurredAt}>{formatObservationTime(entry.occurredAt)}</time></div>
           <p className="body-secondary mt-1">{entry.context.environment}</p>

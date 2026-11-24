@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { LoaderCircle, Mic, Volume2 } from 'lucide-react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { ChevronDown, LoaderCircle, Mic, Volume2 } from 'lucide-react';
 import { getSoundEventClassifier } from '../ml/soundEventRuntime';
 import type { SoundEventCandidate } from '../ml/soundEvents';
 
@@ -8,8 +8,11 @@ const SAMPLE_SECONDS = 4;
 
 export function SoundCueCheck() {
   const [state, setState] = useState<SoundCheckState>('idle');
+  const [expanded, setExpanded] = useState(false);
   const [candidates, setCandidates] = useState<SoundEventCandidate[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const headingId = useId();
+  const contentId = useId();
   const jobRef = useRef(0);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -129,24 +132,29 @@ export function SoundCueCheck() {
   }, []);
 
   const busy = state === 'recording' || state === 'analyzing';
-  return <section className="sound-cue-check" aria-labelledby="sound-cue-title">
-    <div className="sound-cue-heading"><span className="sound-cue-icon"><Volume2 aria-hidden="true" /></span><div>
-      <h2 id="sound-cue-title">Optional sound check</h2>
-      <p>Listen for possible pet vocal sounds using a separate on-device model.</p>
-    </div></div>
-    <p className="sound-cue-privacy">With your click, PawSpeak records about four seconds. The clip stays in memory on this device and is discarded after analysis. The model downloads the first time you use this check.</p>
-    <button className="btn-secondary sound-cue-button" type="button" onClick={() => void checkSounds()} disabled={busy}>
-      {busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <Mic aria-hidden="true" />}
-      {state === 'recording' ? 'Listening for four seconds…' : state === 'analyzing' ? 'Checking sound…' : 'Check nearby sounds'}
+  const isExpanded = expanded || busy;
+  return <section className="sound-cue-check" aria-labelledby={headingId}>
+    <button className="sound-cue-toggle" type="button" aria-expanded={isExpanded} aria-controls={contentId} aria-disabled={busy}
+      onClick={() => { if (!busy) setExpanded(value => !value); }}>
+      <span className="sound-cue-icon"><Volume2 aria-hidden="true" /></span>
+      <span className="sound-cue-summary-copy"><strong id={headingId}>Optional sound check</strong><small>Check for nearby pet sounds on this device</small></span>
+      <ChevronDown className="sound-cue-toggle-chevron" aria-hidden="true" />
     </button>
-    {state === 'recording' && <button className="btn-text sound-cue-cancel" type="button" onClick={cancelSounds}>Stop listening</button>}
-    {state === 'done' && <div className="sound-cue-results" aria-live="polite">
-      {candidates.length ? <>
-        <p>Possible sound events in this sample:</p>
-        <ul>{candidates.map(candidate => <li key={candidate.label}><strong>{candidate.label}</strong><span>{Math.round(candidate.score * 100)}% model score</span></li>)}</ul>
-      </> : <p>No clear pet vocal sound stood out in this sample. A quiet result does not mean no sound was made.</p>}
-      <small>These general sound-event scores are not calibrated confidence and do not tell us how an animal feels or what it wants.</small>
-    </div>}
-    {state === 'error' && <p className="sound-cue-error" role="alert">{errorMessage}</p>}
+    <div className="sound-cue-content" id={contentId} hidden={!isExpanded}>
+      <p className="sound-cue-privacy">When you tap Check, PawSpeak records about four seconds. The clip stays in memory on this device and is discarded after analysis. The model downloads the first time you use this check.</p>
+      <button className="btn-secondary sound-cue-button" type="button" onClick={() => void checkSounds()} disabled={busy}>
+        {busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <Mic aria-hidden="true" />}
+        {state === 'recording' ? 'Listening for four seconds…' : state === 'analyzing' ? 'Checking sound…' : 'Check nearby sounds'}
+      </button>
+      {state === 'recording' && <button className="btn-text sound-cue-cancel" type="button" onClick={cancelSounds}>Stop listening</button>}
+      {state === 'done' && <div className="sound-cue-results" aria-live="polite">
+        {candidates.length ? <>
+          <p>Possible sound events in this sample:</p>
+          <ul>{candidates.map(candidate => <li key={candidate.label}><strong>{candidate.label}</strong><span>{Math.round(candidate.score * 100)}% model score</span></li>)}</ul>
+        </> : <p>No clear pet vocal sound stood out in this sample. A quiet result does not mean no sound was made.</p>}
+        <small>These general sound-event scores are not calibrated confidence and do not tell us how an animal feels or what it wants.</small>
+      </div>}
+      {state === 'error' && <p className="sound-cue-error" role="alert">{errorMessage}</p>}
+    </div>
   </section>;
 }

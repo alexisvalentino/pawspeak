@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { ArrowLeft, BookOpen, Cat, ChevronRight, Dog, ExternalLink, Search } from 'lucide-react';
 import { BODY_LANGUAGE, EVIDENCE_SCALE, type BodyLanguageEntry } from '../data/bodyLanguage';
 import type { PetKind } from '../ml/petClassifier';
-import { CueIllustration } from './CueIllustration';
 import { Modal } from './modals/Modal';
 import { PageHeading } from './PageHeading';
 
@@ -32,6 +31,10 @@ export function DictionaryScreen({ species, onSpeciesChange }: { species: PetKin
       <button className={species === 'dog' ? 'species-active' : ''} aria-pressed={species === 'dog'} onClick={() => { setCategory('All'); onSpeciesChange('dog'); }}><Dog />Dogs</button>
       <button className={species === 'cat' ? 'species-active' : ''} aria-pressed={species === 'cat'} onClick={() => { setCategory('All'); onSpeciesChange('cat'); }}><Cat />Cats</button>
     </div>
+    <div className="dictionary-mascot-guide">
+      <div><strong>Read the whole picture.</strong><p>One cue is a clue. Notice posture, context, and what happens next.</p></div>
+      <img className="dictionary-mascot mascot-avatar" src={species === 'cat' ? '/mascots/cat.webp' : '/mascots/dog.webp'} alt="" />
+    </div>
     <label className="search-field"><Search /><span className="sr-only">Search body language</span><input type="search" placeholder={`Search ${species} cues…`} value={query} onChange={event => setQuery(event.target.value)} /></label>
     <div className="category-scroll" aria-label="Filter by body-language cue type">{categories.map(item => <button key={item} aria-pressed={category === item} className={category === item ? 'filter-active' : ''} onClick={() => setCategory(item)}>{item}</button>)}</div>
     <details className="evidence-scale">
@@ -42,7 +45,7 @@ export function DictionaryScreen({ species, onSpeciesChange }: { species: PetKin
     <p className="results-count">{entries.length} {species} cues to explore</p>
     {entries.length ? <div className="dictionary-grid">{entries.map(entry => {
       return <button className="dictionary-card" key={entry.id} onClick={() => setSelected(entry)}>
-        <span className={`cue-icon ${STATUS_CLASS[entry.status]}`}><CueIllustration entry={entry} /></span>
+        <span className={`cue-icon ${STATUS_CLASS[entry.status]}`}><img className="cue-mascot-art" src={`/cues/${entry.id}.webp`} alt="" loading="lazy" decoding="async" /></span>
         <span className="dictionary-card-text"><strong>{entry.name}</strong><span className="dictionary-card-meaning">{entry.plainWords}</span>
           <small><span className={`status-label ${STATUS_CLASS[entry.status]}`}>{entry.status}</span></small>
         </span><ChevronRight />
@@ -50,7 +53,7 @@ export function DictionaryScreen({ species, onSpeciesChange }: { species: PetKin
     })}</div> : <div className="empty-state"><h2>No cues found</h2><p>Try another word or choose All.</p><button className="btn-text" onClick={() => { setQuery(''); setCategory('All'); }}>Clear filters</button></div>}
     {selected && <Modal label={selected.name} onClose={() => setSelected(null)}><div className="modal-panel dictionary-detail">
       <button className="modal-close" aria-label="Close cue details" onClick={() => setSelected(null)}><ArrowLeft /></button>
-      <span className={`cue-icon ${STATUS_CLASS[selected.status]}`}><CueIllustration entry={selected} /></span>
+      <span className={`cue-icon detail-cue-icon ${STATUS_CLASS[selected.status]}`}><img className="cue-mascot-art" src={`/cues/${selected.id}.webp`} alt="" decoding="async" /></span>
       <span className="detail-category">{selected.species === 'dog' ? 'Dog' : 'Cat'} · {selected.cueType}</span>
       <h2>{selected.name}</h2>
       <section className="detail-highlight"><h3>In plain words</h3>{paragraphs(selected.plainWords)}</section>

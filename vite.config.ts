@@ -1,9 +1,13 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import {createHash} from 'node:crypto';
-import {readFileSync} from 'node:fs';
+import {readFileSync, readdirSync} from 'node:fs';
 import path from 'path';
 import {defineConfig, type Plugin} from 'vite';
+
+const {version: APP_VERSION} = JSON.parse(
+  readFileSync(path.resolve(import.meta.dirname, 'package.json'), 'utf8'),
+) as {version: string};
 
 const CORE_MODEL_FILES = [
   '/models/coco-ssd/model.json',
@@ -24,10 +28,16 @@ const LITERT_RUNTIME_FILES = [
   '/litert-wasm/litert_wasm_compat_internal.js',
   '/litert-wasm/litert_wasm_compat_internal.wasm',
 ];
+const MASCOT_ASSETS = ['/pawspeak-mascot-logo.webp', '/mascots/dog.webp', '/mascots/cat.webp'];
+const CUE_ASSETS = readdirSync(path.resolve(import.meta.dirname, 'public', 'cues'))
+  .filter(fileName => fileName.endsWith('.webp'))
+  .sort()
+  .map(fileName => `/cues/${fileName}`);
 const PUBLIC_ASSETS = [
   '/manifest.webmanifest',
   '/favicon.ico',
-  '/pawspeak-icon.svg',
+  ...MASCOT_ASSETS,
+  ...CUE_ASSETS,
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/icon-512-maskable.png',
@@ -50,11 +60,12 @@ function offlineAppShell(): Plugin {
         .filter(fileName => !fileName.endsWith('.map') && fileName !== 'sw.js')
         .map(fileName => `/${fileName}`);
       const shellUrls = [...new Set([
-        '/', '/index.html', '/manifest.webmanifest', '/favicon.ico', '/pawspeak-icon.svg',
+        '/', '/index.html', '/manifest.webmanifest', '/favicon.ico',
         '/icons/icon-192.png', '/icons/icon-512.png',
         '/icons/apple-touch-icon-120.png', '/icons/apple-touch-icon-152.png',
         '/icons/apple-touch-icon-167.png', '/icons/apple-touch-icon-180.png',
         '/icons/icon-512-maskable.png',
+        ...MASCOT_ASSETS, ...CUE_ASSETS,
         ...builtFiles,
       ])];
       const publicAssets = new Map(PUBLIC_ASSETS.map(fileName => [
@@ -193,6 +204,9 @@ self.addEventListener('fetch', event => {
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss(), offlineAppShell()],
+    define: {
+      __APP_VERSION__: JSON.stringify(APP_VERSION),
+    },
     resolve: {
       alias: {
         '@': path.resolve(import.meta.dirname, '.'),

@@ -1,4 +1,5 @@
 import { BookOpen, Camera, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { MascotDuoScene } from './MascotDuoScene';
 
 export function OnboardingScreen({
   platform,
@@ -17,13 +18,12 @@ export function OnboardingScreen({
 
   return <main className="onboarding-shell">
     <div className="onboarding-brand">
-      <img src="/pawspeak-icon.svg" alt="" />
       <span>PawSpeak</span>
     </div>
     <section className="onboarding-card" aria-labelledby="onboarding-title">
-      <span className="onboarding-icon"><Camera aria-hidden="true" /></span>
-      <p className="onboarding-eyebrow">A quick camera setup</p>
-      <h1 id="onboarding-title">Let’s meet your pet.</h1>
+      <MascotDuoScene className="mascot-duo-onboarding" />
+      <p className="onboarding-eyebrow">Your pet’s little language, made clearer</p>
+      <h1 id="onboarding-title">Meet your pet’s PawSpeak pals.</h1>
       <p className="onboarding-intro">Camera access lets PawSpeak show a live preview and find dogs or cats. When you continue, {platformName} will ask for camera permission.</p>
 
       <div className="onboarding-privacy">

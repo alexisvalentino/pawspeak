@@ -24,8 +24,8 @@ export function PetForm({ pet, onSave, onClose }: { pet?: PetProfile; onSave: (p
         birthdate: birthdate || undefined, notes: notes.trim() || undefined });
     }}>
       <button type="button" onClick={onClose} className="icon-button absolute top-2 right-2" aria-label="Close pet profile">×</button>
-      <h2 className="heading-md mb-1">{pet ? 'Edit pet profile' : 'Add a pet'}</h2>
-      <p className="body-secondary mb-5">Choose dog or cat. Details help keep observations separate.</p>
+      <div className="pet-form-heading"><img className="mascot-avatar" src={species === 'cat' ? '/mascots/cat.webp' : '/mascots/dog.webp'} alt="" /><div><h2 className="heading-md mb-1">{pet ? 'Edit pet profile' : 'Add a pet'}</h2>
+        <p className="body-secondary">Choose dog or cat. Details help keep observations separate.</p></div></div>
       <div className="space-y-4">
         {!pet ? <div><label className="field-label" htmlFor="pet-species">Pet type</label>
           <select id="pet-species" className="field" value={species} onChange={event => setSpecies(event.target.value as PetSpecies)}>
