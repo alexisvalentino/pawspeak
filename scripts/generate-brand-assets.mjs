@@ -4,15 +4,15 @@ import sharp from 'sharp';
 import {fileURLToPath} from 'node:url';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const logoPath = path.join(projectRoot, 'public', 'pawspeak-icon.svg');
-const logoSvg = await sharp(logoPath).png().toBuffer();
+const logoPath = path.join(projectRoot, 'public', 'pawspeak-mascot-logo.png');
+const logoPng = await sharp(logoPath).png().toBuffer();
 const brandBlue = '#8dddf8';
 const brandCream = '#fff9ef';
 const publicIconsDir = path.join(projectRoot, 'public', 'icons');
 await mkdir(publicIconsDir, {recursive: true});
 
 async function renderSourceLogo(size) {
-  return sharp(logoSvg).resize(size, size, {fit: 'fill', kernel: 'lanczos3'}).png().toBuffer();
+  return sharp(logoPng).resize(size, size, {fit: 'fill', kernel: 'lanczos3'}).png().toBuffer();
 }
 
 async function renderLogo(size) {
@@ -131,4 +131,4 @@ try {
   if (error?.code !== 'ENOENT') throw error;
 }
 
-console.log('Generated favicon, PWA, iOS, Android launcher, and splash assets from public/pawspeak-icon.svg.');
+console.log('Generated favicon, PWA, iOS, Android launcher, and splash assets from public/pawspeak-mascot-logo.png.');
