@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
+    "dev": "vite --port=3002 --host=0.0.0.0 --strictPort",
     "predev": "npm run assets:prepare",
     "assets:generate": "node scripts/generate-brand-assets.mjs",
     "assets:prepare": "node scripts/prepare-litert-assets.mjs",
