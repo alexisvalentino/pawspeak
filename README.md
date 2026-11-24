@@ -49,6 +49,10 @@ estimates visible posture, and presents the human-curated body-language dictiona
 observable cues. It explicitly does not diagnose, does not infer emotion, and does not
 translate vocalisations.
 
+PawSpeak is developed under **Pawsmatch AI** as an early research milestone toward clearer
+human-animal communication. The current prototype focuses on observable signals and careful
+limits rather than promising a literal translation of animal language.
+
 ### 1.2 Contributions
 
 1. **A negative result with a measured cause.** We identify why a TensorFlow.js live
@@ -440,6 +444,25 @@ change), the interface directs the user to a veterinarian instead of attempting 
    isotonic-calibrated probabilities before showing any percentage to users.
 5. **Physical-device study.** Measure latency, thermals, and battery with real users across
    device tiers before making any performance claim in product copy.
+
+### Longer-term research possibilities
+
+These are exploratory ideas, not promised features. Health-related work would require
+veterinary collaborators, appropriately sourced and consented datasets, representative
+evaluation, and clear boundaries for when an owner should contact a veterinarian. Any output
+would be a screening or follow-up prompt, never a diagnosis.
+
+- **Eye-health signals.** Study whether photos can reliably surface visible changes such as
+  redness, cloudiness, discharge, or pupil asymmetry for veterinary review. Lighting,
+  reflections, breed differences, and camera quality would need careful evaluation.
+- **Gait and mobility.** Explore short video analysis for changes in stride, symmetry, or
+  weight-bearing that may warrant a veterinary check. This needs temporal models and
+  clinician-reviewed examples across breeds, ages, and mobility conditions.
+- **Signals in context.** Combine posture, facial/eye cues, movement, sound-event labels, and
+  recent context to explain what is visibly different while preserving uncertainty and
+  avoiding claims to read thoughts or translate vocalizations.
+- **Personal baselines.** Investigate private, on-device comparisons with an individual pet's
+  normal patterns, with opt-in data collection and controls to review or remove stored data.
 
 ---
 
