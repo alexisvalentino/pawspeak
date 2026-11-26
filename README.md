@@ -93,10 +93,6 @@ evaluation, no calibration, and no inter-rater agreement, and which derives mood
 single 2-D frame. Furthermore the repository carries **no licence**, so no code or artifact
 may be reused — only the ideas.
 
-**YAMNet.** A general AudioSet classifier. Applied to pet vocalisation it yields
-human-audio-labelled event scores, not calibrated animal-specific confidence. We surface
-labels only, with that limitation stated in the UI.
-
 ---
 
 ## 3. System Architecture
@@ -142,7 +138,6 @@ labels only, with that limitation stated in the UI.
 | Association | `petTracking.ts` | IoU + centre-distance matching, 1-frame hold |
 | Pose | `animalPose.ts`, `animalPoseRuntime.ts` | SimCC peak decode, limb-geometry classification |
 | Cue gating | `catBodyParts.ts` | Two-part corroboration, no emotion vocabulary |
-| Audio | `soundEvents.ts`, `soundEventRuntime.ts` | YAMNet label surfacing |
 
 ### 3.2 Model assets
 
@@ -151,7 +146,6 @@ labels only, with that limitation stated in the UI.
 | `efficientdet_lite2.tflite` | 7.2 MB | TFLite (Android) | Native animal detection |
 | `coco-ssd/model.json` + 5 shards | 17.7 MB | TF.js WebGL | Web/browser detection fallback |
 | `rtm_animal_fp16.tflite` | 26.3 MB | LiteRT (WebGPU/wasm) | 17-keypoint pose |
-| `yamnet.tflite` | 3.9 MB | LiteRT | Sound-event labels |
 | `litert-wasm/*` | 21.6 MB | WASM | LiteRT runtime (relaxed-SIMD + compat builds) |
 
 ---
@@ -458,9 +452,10 @@ would be a screening or follow-up prompt, never a diagnosis.
 - **Gait and mobility.** Explore short video analysis for changes in stride, symmetry, or
   weight-bearing that may warrant a veterinary check. This needs temporal models and
   clinician-reviewed examples across breeds, ages, and mobility conditions.
-- **Signals in context.** Combine posture, facial/eye cues, movement, sound-event labels, and
-  recent context to explain what is visibly different while preserving uncertainty and
-  avoiding claims to read thoughts or translate vocalizations.
+- **Signals in context.** Explore how posture, facial/eye cues, movement, and recent context
+  can explain what is visibly different while preserving uncertainty and avoiding claims to
+  read thoughts or translate vocalizations. Sound-event labels alone do not explain a pet's
+  intent or emotion.
 - **Personal baselines.** Investigate private, on-device comparisons with an individual pet's
   normal patterns, with opt-in data collection and controls to review or remove stored data.
 
@@ -507,13 +502,11 @@ Detailed documentation: [DEVELOPMENT_GUIDE](docs/DEVELOPMENT_GUIDE.md) ·
 5. Fawzy, A. et al. *DeepCat: A Deep Learning Approach to Understand Your Cat's Body Language.*
    JAC-ECC 2023. IEEE Xplore 10479630.
 6. Ren, S. et al. *Faster R-CNN.* NeurIPS 2015. (NMS post-processing used by COCO-SSD.)
-7. Hershey, S. et al. *CNN Architectures for Large-Scale Audio Classification.* ICASSP 2017.
-   (YAMNet / AudioSet.)
-8. Cafazzo, S., Natoli, E. *The social function of tail up in the domestic cat.* Behav.
+7. Cafazzo, S., Natoli, E. *The social function of tail up in the domestic cat.* Behav.
    Processes 2009.
-9. TensorFlow.js / `@tensorflow/tfjs-core` 4.22.0 — environment and backend registration
+8. TensorFlow.js / `@tensorflow/tfjs-core` 4.22.0 — environment and backend registration
    (`dist/environment.js`).
-10. `@tensorflow-models/coco-ssd` 2.2.3 — `ObjectDetection.prototype.infer` (`dist/index.js`).
+9. `@tensorflow-models/coco-ssd` 2.2.3 — `ObjectDetection.prototype.infer` (`dist/index.js`).
 
 ---
 

@@ -1,6 +1,6 @@
 let runtimePromise: Promise<typeof import('@litertjs/core')> | null = null;
 
-/** LiteRT.js owns one global WASM runtime, shared by the pose and audio models. */
+/** LiteRT.js owns one global WASM runtime used by the pose model. */
 export function getLiteRtRuntime(): Promise<typeof import('@litertjs/core')> {
   if (!runtimePromise) {
     runtimePromise = (async () => {

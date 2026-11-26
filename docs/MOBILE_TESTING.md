@@ -10,7 +10,7 @@
 6. Tap **Check nearby sounds**, allow microphone access, and confirm listening lasts about four seconds. Check that a possible event is shown only as a sound label and model score, and that no recording is saved or uploaded. Deny microphone access and confirm the rest of the camera still works.
 7. Open the dictionary, search and filter entries, and follow a source link while online.
 8. Add a dog profile and journal observation, edit/delete one, and export the journal.
-9. Enable airplane mode, relaunch the app, and check that the dictionary, local journal, detector, and any pose/audio model previously used remain available.
+9. Enable airplane mode, relaunch the app, and check that the dictionary, local journal, detector, and any pose model previously used remain available.
 
 ## iOS Safari PWA
 
@@ -21,6 +21,6 @@
 
 ## Device notes
 
-- PWA setup caches the app and approximately 18.6 MB detector. Pose weights (27.5 MB), sound weights (4.1 MB), and LiteRT WASM runtimes download/cache on first use, so allow extra storage and network time.
-- Android APK assets include the detector, pose/audio models, and LiteRT runtime at install time; test final APK size and first-launch performance.
-- Camera and model performance depend on device/browser support and available memory. This checklist is for manual real-device verification; no physical phone is attached to this build environment. Sound-event scores are general AudioSet labels rather than calibrated pet behavior predictions; position movement is a box-tracking observation rather than an action classifier.
+- PWA setup caches the app and approximately 18.6 MB detector. Pose weights (27.5 MB) and LiteRT WASM runtimes download/cache on first use, so allow extra storage and network time.
+- Android APK assets include the detector, pose model, and LiteRT runtime at install time; test final APK size and first-launch performance.
+- Camera and model performance depend on device/browser support and available memory. This checklist is for manual real-device verification; no physical phone is attached to this build environment. Position movement is a box-tracking observation rather than an action classifier.

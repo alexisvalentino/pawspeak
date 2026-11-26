@@ -292,13 +292,6 @@ input::placeholder, textarea::placeholder { color: #61758d; opacity: 1; }
 .privacy-note p { color: #44675d; font-size: .75rem; line-height: 1.45; }
 .privacy-note p strong { color: #225a48; }
 .offline-status { flex-basis: 100%; margin-left: 1.7rem; color: #4b6983; font-size: .7rem; }
-.sound-cue-check { margin: .1rem 0 0; background: rgb(255 255 255 / .65); border: 1px solid #d1dfeb; border-radius: 15px; }
-.sound-cue-toggle { grid-template-columns: 34px minmax(0,1fr) 24px; min-height: 56px; gap: .55rem; padding: .45rem .7rem; color: var(--guide-ink); }
-.sound-cue-icon { width: 34px; height: 34px; color: var(--guide-blue); }
-.sound-cue-summary-copy strong { color: var(--guide-ink); font-size: .83rem; font-weight: 660; }
-.sound-cue-summary-copy small { color: var(--guide-muted); font-size: .71rem; }
-.sound-cue-content { padding: 0 .75rem .75rem; }
-.sound-cue-privacy { color: #4e6680; font-size: .78rem; line-height: 1.5; }
 
 /* Learn */
 .dictionary-heading { margin-bottom: 1rem; }
@@ -550,13 +543,12 @@ input::placeholder, textarea::placeholder { color: #61758d; opacity: 1; }
 }
 @media (min-width: 900px) {
   .app-content { padding-inline: 2rem; }
-  .camera-screen { grid-template-columns: minmax(0,1.15fr) minmax(19rem,.85fr); grid-template-areas: "heading heading" "stage controls" "result result" "privacy sound"; align-items: start; gap: .9rem 1.3rem; }
+  .camera-screen { grid-template-columns: minmax(0,1.15fr) minmax(19rem,.85fr); grid-template-areas: "heading heading" "stage controls" "result result" "privacy privacy"; align-items: start; gap: .9rem 1.3rem; }
   .camera-heading { grid-area: heading; }
   .camera-stage { grid-area: stage; min-height: 480px; aspect-ratio: 1 / 1; }
   .camera-control-panel { grid-area: controls; padding-top: .1rem; }
   .analysis-result { grid-area: result; }
   .privacy-note { grid-area: privacy; }
-  .sound-cue-check { grid-area: sound; }
   .camera-actions { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .dictionary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .observe-form { max-width: 58rem; margin-inline: auto; }

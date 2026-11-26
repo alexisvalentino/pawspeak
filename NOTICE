@@ -28,11 +28,9 @@ own licence; the Apache-2.0 licence covering PawSpeak does not replace them.
 | `models/coco-ssd/` (model.json + shards) | TensorFlow COCO-SSD | Apache-2.0 |
 | `models/pet-detector/efficientdet_lite2.tflite` | TensorFlow Lite Model Maker / EfficientDet | Apache-2.0 |
 | `models/animal-pose/rtm_animal_fp16.tflite` | RTMPose, AP-10K dataset | See upstream; AP-10K is research-use |
-| `models/sound-event/yamnet.tflite` | Google YAMNet / AudioSet | Apache-2.0 (AudioSet ontology terms apply) |
 | `litert-wasm/` | LiteRT.js WASM runtime | Apache-2.0 |
 
-**Before distributing a release**, verify the upstream licence terms for the pose model and
-the AudioSet ontology for your jurisdiction and intended use.
+**Before distributing a release**, verify the upstream licence terms for the pose model.
 
 ## Reference material, not redistributed
 

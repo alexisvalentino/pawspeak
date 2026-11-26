@@ -1,6 +1,6 @@
 # Development guide — cue translation to release
 
-Status: working guide · Last revised 2026-11-16 · Companion to
+Status: working guide · Last revised 2026-11-26 · Companion to
 [PET_AI_STRATEGY](PET_AI_STRATEGY.md), [TECHNICAL_SPEC](TECHNICAL_SPEC.md),
 [PRODUCT_SPEC](PRODUCT_SPEC.md), [ROADMAP](ROADMAP.md), [DATA_AND_EVALUATION](DATA_AND_EVALUATION.md).
 
@@ -15,7 +15,7 @@ emotion inference.**
 What exists and works:
 
 - `npm run build` — clean (7.39 s). `npm run lint` (`tsc --noEmit`) — clean.
-- Detector, pose, sound-event, dictionary, journal, profiles all wired and shipping.
+- Detector, pose, dictionary, journal, and profiles are wired and shipping.
 - `release/PawSpeak-debug.apk` and `PawSpeak-release.apk` build.
 - 102 dictionary entries (49 cat, 53 dog) with `plainWords`, evidence tiers, and 352 citations.
 - `getBehaviorClassifier()` is already called from `CameraScreen.tsx` and returns `null` when
@@ -362,7 +362,7 @@ Recording these prevents scope creep mid-build:
 
 - Emotion or mood labels — permanent exclusion ([PET_AI_STRATEGY](PET_AI_STRATEGY.md) §2).
 - Motion cues (tail lashing, pacing, helicopter tail) — needs a temporal model.
-- Audio cues — YAMNet surfaces labels only and is not calibrated for animals.
+- Audio interpretation — out of scope; a bark or meow label cannot establish intent or emotion.
 - The body-part detector (`catBodyParts.ts`) — deprecated from the critical path; cue
   classification replaces it. Leave the module and its tests in place, but do not wire it.
 - CCTV / fixed-camera monitoring — a different product (`PET_AI_STRATEGY` §3.1).

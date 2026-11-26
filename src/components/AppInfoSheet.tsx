@@ -27,7 +27,7 @@ export function AppInfoSheet({ open, onClose, onExport, onClear }: {
 
       <section className="app-info-section">
         <h3>Current limits</h3>
-        <p>PawSpeak offers on-device animal detection and source-backed dog and cat body-language guides. It does not read emotions, translate vocalizations, or diagnose. Contact a veterinarian about sudden changes, injury, or health concerns.</p>
+        <p>Camera checks can identify some animals and surface visible posture cues. PawSpeak’s source-backed dog and cat guides add context, but can’t tell exactly how your pet feels, translate vocalizations, or diagnose health issues. Contact a veterinarian about sudden changes, injury, or health concerns.</p>
       </section>
 
       <section className="app-info-section app-info-danger">

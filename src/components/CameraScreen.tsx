@@ -8,7 +8,6 @@ import { cameraStartErrorMessage, detectorErrorDetails, petDetectorErrorMessage 
 import { requestCameraStream } from '../ml/cameraPermission';
 import { ANIMAL_POSE_MODEL_VERSION } from '../ml/animalPose';
 import { getAnimalPoseEstimator, type AnimalPoseAnalysis } from '../ml/animalPoseRuntime';
-import { SoundCueCheck } from './SoundCueCheck';
 import { hasVisiblePositionChange, type MotionSample } from '../ml/motionCue';
 import { decideLiveFailure } from '../ml/liveDetectionLoop';
 
@@ -375,8 +374,7 @@ export function CameraScreen({ onExplore, onObserve, onHelp, petName, petSpecies
             : <p>This general animal pose estimate does not map to a validated body-language guide for this species yet.</p>}</>}
       <button className="btn-secondary" onClick={reset}><RefreshCw />Try another photo</button>
     </section>}
-    <div className="privacy-note"><ShieldCheck /><p><strong>Your photos stay on this device.</strong> PawSpeak checks them here and doesn’t upload or save them. Camera checks can find a pet, but can’t tell how they feel.</p>{offlineStatus && offlineStatus !== 'development' && <span className={`offline-status offline-status-${offlineStatus}`}>{offlineStatus === 'ready' ? 'Ready to use offline' : offlineStatus === 'unavailable' ? 'Offline use isn’t ready' : 'Getting ready for offline use…'}</span>}</div>
-    <SoundCueCheck />
+    <div className="privacy-note"><ShieldCheck /><p><strong>Your photos stay on this device.</strong> They aren’t uploaded or saved.</p>{offlineStatus && offlineStatus !== 'development' && <span className={`offline-status offline-status-${offlineStatus}`}>{offlineStatus === 'ready' ? 'Ready to use offline' : offlineStatus === 'unavailable' ? 'Offline use isn’t ready' : 'Getting ready for offline use…'}</span>}</div>
   </div>;
 }
 

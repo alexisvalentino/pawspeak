@@ -19,7 +19,6 @@ const CORE_MODEL_FILES = [
 ];
 const OPTIONAL_MODEL_FILES = [
   '/models/animal-pose/rtm_animal_fp16.tflite',
-  '/models/sound-event/yamnet.tflite',
 ];
 const MODEL_FILES = [...CORE_MODEL_FILES, ...OPTIONAL_MODEL_FILES];
 const LITERT_RUNTIME_FILES = [
@@ -47,7 +46,6 @@ const PUBLIC_ASSETS = [
   '/icons/apple-touch-icon-180.png',
   ...MODEL_FILES,
   '/models/animal-pose/README.md',
-  '/models/sound-event/README.md',
   ...LITERT_RUNTIME_FILES,
 ];
 

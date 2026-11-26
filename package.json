@@ -14,7 +14,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "test": "tsx --test src/utils/journal.test.ts src/ml/petClassifier.test.ts src/ml/detectionPipeline.test.ts src/ml/nativePetDetector.test.ts src/ml/catBodyParts.test.ts src/ml/animalPose.test.ts src/ml/soundEvents.test.ts src/ml/motionCue.test.ts src/ml/liveGuidance.test.ts src/ml/liveDetectionLoop.test.ts src/ml/petTracking.test.ts src/ml/cameraMessages.test.ts src/ml/cameraPermission.test.ts src/utils/serviceWorkerCleanup.test.ts src/data/bodyLanguage.test.ts src/components/DictionaryScreen.test.tsx src/components/CueIllustration.test.tsx",
+    "test": "tsx --test src/utils/journal.test.ts src/ml/petClassifier.test.ts src/ml/detectionPipeline.test.ts src/ml/nativePetDetector.test.ts src/ml/catBodyParts.test.ts src/ml/animalPose.test.ts src/ml/motionCue.test.ts src/ml/liveGuidance.test.ts src/ml/liveDetectionLoop.test.ts src/ml/petTracking.test.ts src/ml/cameraMessages.test.ts src/ml/cameraPermission.test.ts src/utils/serviceWorkerCleanup.test.ts src/data/bodyLanguage.test.ts src/components/DictionaryScreen.test.tsx src/components/CueIllustration.test.tsx",
     "android:add": "cap add android",
     "android:sync": "npm run build && cap sync android",
     "android:apk": "npm run android:sync && node scripts/build-android.mjs",
