@@ -41,7 +41,7 @@ export function PetForm({ pet, onSave, onClose }: { pet?: PetProfile; onSave: (p
         <div><label className="field-label" htmlFor="pet-notes">Useful care context (optional)</label>
           <textarea id="pet-notes" className="field" rows={3} maxLength={1000} value={notes} onChange={e => setNotes(e.target.value)} placeholder="Known sensitivities or routines. This is not a medical record." /></div>
       </div>
-      <button className="button-primary w-full mt-5" type="submit">{pet ? 'Save profile changes' : 'Add pet and continue'}</button>
+      <button className="button-primary w-full mt-5" type="submit">{pet ? 'Save profile changes' : 'Add pet'}</button>
     </form>
   </Modal>;
 }

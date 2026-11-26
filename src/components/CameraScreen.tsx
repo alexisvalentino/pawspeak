@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AlertCircle, Camera, CheckCircle2, CircleDashed, ImagePlus, LoaderCircle, PawPrint, RefreshCw, ShieldCheck, SwitchCamera, X } from 'lucide-react';
+import { AlertCircle, Camera, CircleHelp, ImagePlus, Info, LoaderCircle, PawPrint, RefreshCw, ShieldCheck, SwitchCamera, X } from 'lucide-react';
 import { detectPets, detectScene, getBehaviorClassifier, type BehaviorResult, type PetDetection, type PetKind, type SceneObject } from '../ml/petClassifier';
 import { BODY_LANGUAGE } from '../data/bodyLanguage';
 import { buildLiveGuidance, sampleLuminance, type GuidanceCheck } from '../ml/liveGuidance';
@@ -8,7 +8,6 @@ import { cameraStartErrorMessage, detectorErrorDetails, petDetectorErrorMessage 
 import { requestCameraStream } from '../ml/cameraPermission';
 import { ANIMAL_POSE_MODEL_VERSION } from '../ml/animalPose';
 import { getAnimalPoseEstimator, type AnimalPoseAnalysis } from '../ml/animalPoseRuntime';
-import { PageHeading } from './PageHeading';
 import { SoundCueCheck } from './SoundCueCheck';
 import { hasVisiblePositionChange, type MotionSample } from '../ml/motionCue';
 import { decideLiveFailure } from '../ml/liveDetectionLoop';
@@ -38,8 +37,12 @@ function cropDetection(source: HTMLCanvasElement, bbox: PetDetection['bbox']): H
   context.drawImage(source, x, y, crop.width, crop.height, 0, 0, crop.width, crop.height);
   return crop;
 }
-export function CameraScreen({ onExplore, offlineStatus, initialCameraStreamRef, initialCameraStreamToken }: {
+export function CameraScreen({ onExplore, onObserve, onHelp, petName, petSpecies, offlineStatus, initialCameraStreamRef, initialCameraStreamToken }: {
   onExplore: (species: PetKind) => void;
+  onObserve?: () => void;
+  onHelp: () => void;
+  petName?: string;
+  petSpecies?: PetKind;
   offlineStatus?: 'ready' | 'preparing' | 'unavailable' | 'development';
   initialCameraStreamRef: { current: MediaStream | null };
   initialCameraStreamToken: number;
@@ -288,11 +291,7 @@ export function CameraScreen({ onExplore, offlineStatus, initialCameraStreamRef,
   const reset = () => { requestRef.current += 1; stopCamera(); tracksRef.current = createPetTrackState(); motionSamplesRef.current.clear(); setPositionChanged(false); setLiveTracks([]); setTrackingStatus('checking'); setDetectorDiagnostic(''); lastCanvasRef.current = null; setPhase('idle'); setPreview(null); setAnalysis(null); setMessage(''); };
   const detection = analysis?.detections[0];
   const petGuidance = guidance.find(check => check.id === 'pet');
-  const liveMessage = petGuidance?.status === 'good'
-          ? `I can see a ${liveTracks[0]?.pet ?? 'animal'}!`
-      : petGuidance?.detail === 'One at a time'
-        ? 'I see a few animals! Let’s look at one at a time.'
-        : 'Let’s find an animal!';
+  const cameraWarnings = guidance.filter(check => check.status === 'warn');
   const projectedLiveTracks = liveTracks.flatMap(track => {
     const video = videoRef.current;
     if (!video) return [];
@@ -300,8 +299,11 @@ export function CameraScreen({ onExplore, offlineStatus, initialCameraStreamRef,
     return box ? [{ track, box }] : [];
   });
   const showCameraEmpty = !preview && (phase === 'idle' || phase === 'error');
-  return <div>
-    <PageHeading tone="sky" icon={<PawPrint />} title="Let’s get your pet in view" description="I’ll help with a clear photo. For body-language meanings, explore the dictionary." />
+  return <div className="camera-screen">
+    <header className="camera-heading">
+      <div><h1>Let’s get your pet in view</h1><p>Center one animal in good light.</p></div>
+      <button className="camera-help-button" onClick={onHelp} aria-label="About and help"><CircleHelp aria-hidden="true" /></button>
+    </header>
     <div className={showCameraEmpty ? 'camera-stage camera-stage-empty-state' : 'camera-stage'} style={preview ? { aspectRatio: `${lastCanvasRef.current?.width || 4}/${lastCanvasRef.current?.height || 3}`, height: 'auto' } : undefined}>
       {phase === 'live' || phase === 'starting' ? <>
         <video ref={videoRef} className="camera-video" autoPlay muted playsInline aria-label="Live pet camera preview" />
@@ -310,6 +312,13 @@ export function CameraScreen({ onExplore, offlineStatus, initialCameraStreamRef,
         <span className="camera-live-label" role="status">{phase === 'starting' ? 'Opening camera…' : trackingStatus === 'unavailable' ? 'Camera on' : petGuidance?.status === 'good' ? 'Pet in view' : 'Finding your pet…'}</span>
         <button className="camera-close" onClick={reset} aria-label="Stop camera"><X /></button>
         <button className="camera-switch" onClick={() => { const next = facing === 'environment' ? 'user' : 'environment'; setFacing(next); void startCamera(next); }} aria-label="Switch camera"><SwitchCamera /></button>
+        {phase === 'live' && (cameraWarnings.length > 0 || trackingStatus === 'unavailable' || positionChanged) && <div className={`camera-guidance-overlay${trackingStatus === 'unavailable' ? ' camera-guidance-overlay-error' : ''}`} role={trackingStatus === 'unavailable' ? 'alert' : 'status'} aria-label="Live camera guidance">
+          {trackingStatus === 'unavailable' && <div className="camera-guidance-error"><strong>Animal finding paused</strong><p>{petDetectorErrorMessage()}</p>{detectorDiagnostic && <details className="detector-diagnostic"><summary>Technical details</summary><code>{detectorDiagnostic}</code></details>}<button className="live-retry-button" onClick={() => {
+            setTrackingStatus('checking'); setDetectorDiagnostic(''); setGuidance(buildLiveGuidance(null, null, 0, 0)); setLiveTracks([]); setTrackingRetry(retry => retry + 1);
+          }}><RefreshCw aria-hidden="true" />Try again</button></div>}
+          {cameraWarnings.map(check => <p className="camera-guidance-warning" key={check.id}><AlertCircle aria-hidden="true" /><span><strong>{check.label}</strong>{check.detail}</span></p>)}
+          {positionChanged && <p className="camera-guidance-note"><Info aria-hidden="true" /><span>Camera movement can affect this observation.</span></p>}
+        </div>}
       </> : preview ? <div className="capture-preview"><img src={preview} alt="Captured image for analysis" />
         {analysis?.pose?.points.length && lastCanvasRef.current && <svg className="animal-pose-overlay" viewBox={`0 0 ${lastCanvasRef.current.width} ${lastCanvasRef.current.height}`} preserveAspectRatio="none" role="img" aria-label="Estimated animal body landmarks">
           {POSE_BONES.map(([from, to]) => {
@@ -321,35 +330,19 @@ export function CameraScreen({ onExplore, offlineStatus, initialCameraStreamRef,
         </svg>}
         {analysis?.detections.map((animal, i) => <span key={i} className="detection-box" style={{ left: `${animal.bbox[0] / (lastCanvasRef.current?.width || 1) * 100}%`, top: `${animal.bbox[1] / (lastCanvasRef.current?.height || 1) * 100}%`, width: `${animal.bbox[2] / (lastCanvasRef.current?.width || 1) * 100}%`, height: `${animal.bbox[3] / (lastCanvasRef.current?.height || 1) * 100}%` }}><span className="live-pet-label">{animalName(animal.pet)} · {Math.round(animal.confidence * 100)}% model score</span></span>)}
         {phase === 'analyzing' && <div className="analyzing-cover"><LoaderCircle className="spin" /><strong>Checking your photo…</strong><span>Your photo stays on this device.</span></div>}
-      </div> : <div className="camera-empty"><div className="camera-mascot-scene"><img className="camera-mascot mascot-avatar" src="/mascots/dog.webp" alt="" /></div><h2>A clear view helps</h2><p>Keep one animal in good light for a clearer detection.</p><small className="camera-profile-note">Scan without a pet profile. Dog and cat guides are in Learn.</small></div>}
+      </div> : <div className="camera-empty"><div className="camera-mascot-scene"><img className="camera-mascot mascot-avatar" src={`/mascots/${petSpecies === 'cat' ? 'cat' : 'dog'}.webp`} alt="" /></div><h2>Ready to scan your pet?</h2><p>Start the camera to see live light and framing guidance here.</p><small className="camera-profile-note">You can also upload a photo below. Dog and cat guides are in Learn.</small></div>}
       <canvas ref={canvasRef} hidden />
     </div>
-    {phase === 'live' && <button className="capture-button" onClick={() => void capture()}><Camera /><span>Capture pet</span></button>}
-    {phase === 'live' && (trackingStatus === 'unavailable'
-      ? <div className="live-coach live-coach-error" role="alert">
-        <div className="live-coach-error-heading"><AlertCircle aria-hidden="true" /><strong>Animal finding paused</strong></div>
-        <p>{petDetectorErrorMessage()}</p>
-        {detectorDiagnostic && <details className="detector-diagnostic"><summary>Technical details</summary><code>{detectorDiagnostic}</code></details>}
-        <button className="live-retry-button" onClick={() => {
-          setTrackingStatus('checking');
-          setDetectorDiagnostic('');
-          setGuidance(buildLiveGuidance(null, null, 0, 0));
-          setLiveTracks([]);
-          setTrackingRetry(retry => retry + 1);
-        }}><RefreshCw aria-hidden="true" />Try again</button>
-      </div>
-      : <div className="live-coach" role="group" aria-label="Camera tips">
-        <div className="live-coach-message"><PawPrint aria-hidden="true" /><strong>{liveMessage}</strong></div>
-        <div className="live-coach-checks">{guidance.map(check => <div className={`coach-check coach-${check.status}`} key={check.id}>
-          {check.status === 'good' ? <CheckCircle2 /> : check.status === 'warn' ? <AlertCircle /> : <CircleDashed />}
-          <span><strong>{check.label}</strong><small>{check.detail}</small></span>
-        </div>)}</div>
-        {positionChanged && <p className="motion-observation" role="status">Your animal’s tracked position changed across camera checks. Camera movement can affect this observation.</p>}
-      </div>)}
-    {(phase === 'idle' || phase === 'error') && <div className="camera-actions"><button className="btn-primary btn-large" onClick={() => void startCamera()}><Camera />Start camera</button>
+    <div className="camera-control-panel">
+    {(phase === 'idle' || phase === 'error' || phase === 'starting' || phase === 'live') && <div className="camera-actions">
+      {phase === 'live' ? <button className="camera-action-tile camera-action-primary" onClick={() => void capture()}><span className="camera-action-icon"><Camera aria-hidden="true" /></span><span>Capture pet</span></button>
+        : <button className="camera-action-tile camera-action-primary" onClick={() => void startCamera()} disabled={phase === 'starting'}><span className="camera-action-icon"><Camera aria-hidden="true" /></span><span>{phase === 'starting' ? 'Opening camera…' : 'Start camera'}</span></button>}
       <input ref={uploadRef} id="pet-photo" className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={event => void uploadPhoto(event.target.files?.[0])} />
-      <label htmlFor="pet-photo" className="btn-secondary btn-large"><ImagePlus />Upload a photo</label></div>}
+      <label htmlFor="pet-photo" className="camera-action-tile"><span className="camera-action-icon"><ImagePlus aria-hidden="true" /></span><span>Upload a photo</span></label>
+    </div>}
+    {onObserve && phase !== 'analyzing' && <button className="camera-observe-link" onClick={onObserve}><PawPrint aria-hidden="true" /><span>{petName ? `Record what you notice about ${petName}` : 'Record what you notice'}</span></button>}
     {message && (phase === 'error' || phase === 'live') && <div className="inline-alert" role="alert"><p>{message}</p>{detectorDiagnostic && <details className="detector-diagnostic"><summary>Technical details</summary><code>{detectorDiagnostic}</code></details>}{phase === 'error' && lastCanvasRef.current && <button className="btn-text" onClick={() => { if (lastCanvasRef.current) void analyzeCanvas(lastCanvasRef.current); }}>Retry detection</button>}</div>}
+    </div>
 
     {phase === 'result' && analysis && <section className="analysis-result" aria-live="polite">
       {analysis.detections.length === 0 ? <><span className="result-symbol result-symbol-muted"><PawPrint /></span><h2>No animal found</h2>

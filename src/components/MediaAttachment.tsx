@@ -46,7 +46,7 @@ export function MediaAttachment({ media, onChange, consent, onConsent }: {
     <p className="body-secondary mt-1">Attach a short clip for your own review. No model analysis is enabled yet.</p>
     <label className="consent-row">
       <input type="checkbox" className="w-5 h-5 shrink-0" checked={consent} onChange={e => { onConsent(e.target.checked); if (!e.target.checked && media) { URL.revokeObjectURL(media.url); onChange(null); } }} />
-      <span className="text-sm leading-5">I consent to loading this clip in this browser for preview. It will not be uploaded or saved with this observation.</span>
+      <span className="text-sm leading-5">I consent to loading this clip in PawSpeak on this device for preview. It will not be uploaded or saved with this observation.</span>
     </label>
     <div className="flex flex-wrap items-center gap-2 mt-3">
       <input aria-label="Choose audio or video clip" ref={input} className="sr-only" type="file" id={fileInputId} accept="video/*,audio/*" disabled={!consent || loading} onChange={e => void handleFile(e.target.files?.[0])} />

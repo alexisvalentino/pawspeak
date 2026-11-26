@@ -1,4 +1,4 @@
-import { BookOpen, Camera, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { BookOpen, Camera, ShieldCheck } from 'lucide-react';
 import { MascotDuoScene } from './MascotDuoScene';
 
 export function OnboardingScreen({
@@ -18,23 +18,20 @@ export function OnboardingScreen({
 
   return <main className="onboarding-shell">
     <div className="onboarding-brand">
+      <img className="brand-mark" src="/pawspeak-mascot-logo.webp" alt="" />
       <span>PawSpeak</span>
     </div>
     <section className="onboarding-card" aria-labelledby="onboarding-title">
       <MascotDuoScene className="mascot-duo-onboarding" />
-      <p className="onboarding-eyebrow">Your pet’s little language, made clearer</p>
-      <h1 id="onboarding-title">Meet your pet’s PawSpeak pals.</h1>
-      <p className="onboarding-intro">Camera access lets PawSpeak show a live preview and find dogs or cats. When you continue, {platformName} will ask for camera permission.</p>
+      <h1 id="onboarding-title">Pet pals, understood.</h1>
+      <p className="onboarding-intro">Track behavior. Understand together. Share what you see.</p>
 
       <div className="onboarding-privacy">
         <ShieldCheck aria-hidden="true" />
         <p><strong>Your camera stays yours.</strong> Frames are analyzed on this device. PawSpeak doesn’t upload or save them, and it doesn’t infer feelings.</p>
       </div>
 
-      <div className="onboarding-points">
-        <div><CheckCircle2 aria-hidden="true" /><span>Use camera scanning without creating a pet profile.</span></div>
-        <div><BookOpen aria-hidden="true" /><span>You can explore the dictionary without camera access.</span></div>
-      </div>
+      <p className="onboarding-camera-note">Camera access is optional. {platformName} will ask only if you choose to turn it on.</p>
 
       {error && <p className="onboarding-error" role="alert">{error}</p>}
       <button className="btn-primary onboarding-primary" onClick={onAllowCamera} disabled={pending}>
@@ -42,7 +39,7 @@ export function OnboardingScreen({
       </button>
       <button className="btn-secondary onboarding-secondary" onClick={onContinueWithoutCamera}>Continue without camera</button>
       {pending && <p className="onboarding-pending" role="status">Approve or deny the camera request in the system prompt to continue.</p>}
-      <p className="onboarding-footnote">You can change camera access later in your device or browser settings.</p>
+      <p className="onboarding-footnote"><BookOpen aria-hidden="true" /> The dog and cat dictionary is always available.</p>
     </section>
   </main>;
 }
